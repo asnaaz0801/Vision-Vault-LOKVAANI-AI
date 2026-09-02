@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   initSlaClockEngine();
   renderCurrentView();
   initModals();
+  initOfficerMap();
+  initOfficerGpsTracking();
 });
 
 /* ==========================================================================
@@ -88,6 +90,8 @@ function renderCurrentView() {
   switch (appState.currentView) {
     case 'dashboard':
       renderDashboardView();
+      if (typeof updateOfficerMapMarkers === 'function') updateOfficerMapMarkers();
+      if (officerMap) setTimeout(() => officerMap.invalidateSize(), 200);
       break;
     case 'complaints':
       renderComplaintsTable();
@@ -256,6 +260,152 @@ function attachQueueCardClickListeners() {
       const id = el.getAttribute('data-complaint-id');
       if (id) openComplaintDetailModal(id);
     });
+  });
+}
+
+/* ==========================================================================
+   OFFICER LEAFLET GIS MAP & REAL-TIME GPS TRACKING
+   ========================================================================== */
+let officerMap = null;
+let officerMarker = null;
+let officerWatchId = null;
+let complaintMarkersGroup = null;
+
+function initOfficerMap() {
+  const container = document.getElementById('officer-leaflet-map');
+  if (!container || typeof L === 'undefined') return;
+
+  if (!officerMap) {
+    try {
+      officerMap = L.map('officer-leaflet-map', { zoomControl: true }).setView([18.5204, 73.8567], 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(officerMap);
+      complaintMarkersGroup = L.layerGroup().addTo(officerMap);
+    } catch (e) {
+      console.warn("Officer map initialization notice:", e);
+      return;
+    }
+  }
+
+  updateOfficerMapMarkers();
+}
+
+function updateOfficerMapMarkers() {
+  if (!officerMap || !complaintMarkersGroup) return;
+
+  complaintMarkersGroup.clearLayers();
+  const bounds = [];
+
+  appState.complaints.forEach((item, index) => {
+    // Generate distinct coords if missing
+    let baseLat = 18.5204;
+    let baseLng = 73.8567;
+
+    if (item.latitude && item.longitude) {
+      baseLat = parseFloat(item.latitude);
+      baseLng = parseFloat(item.longitude);
+    } else {
+      // Synthetic spread for visual display
+      baseLat = 18.5150 + (index * 0.005 - 0.008);
+      baseLng = 73.8500 + (index * 0.006 - 0.010);
+    }
+
+    bounds.push([baseLat, baseLng]);
+
+    const isCritical = item.slaState === 'SLA BREACHED' || item.priorityLevel === 'Critical' || item.severity === 'Critical';
+    const color = isCritical ? '#DC2626' :
+                  item.priorityLevel === 'High' ? '#F59E0B' :
+                  item.priorityLevel === 'Medium' ? '#3B82F6' : '#10B981';
+
+    const iconHtml = `<div style="background: ${color}; width: 28px; height: 28px; border-radius: 50%; border: 2px solid white; box-shadow: 0 3px 8px rgba(0,0,0,0.35); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px;">${item.priorityScore || 80}</div>`;
+
+    const customIcon = L.divIcon({
+      className: 'officer-complaint-pin',
+      html: iconHtml,
+      iconSize: [28, 28],
+      iconAnchor: [14, 14]
+    });
+
+    const marker = L.marker([baseLat, baseLng], { icon: customIcon });
+
+    const popupContent = `
+      <div style="font-family: system-ui, sans-serif; padding: 4px; min-width: 180px;">
+        <div style="font-weight: 800; font-size: 0.875rem; color: #0F172A; margin-bottom: 2px;">${item.complaintId}</div>
+        <div style="font-size: 0.78125rem; font-weight: 600; color: ${color}; margin-bottom: 4px;">${item.category || 'Grievance'} • Score ${item.priorityScore}/100</div>
+        <div style="font-size: 0.75rem; color: #475569; margin-bottom: 8px;">📍 ${item.location}</div>
+        <button class="btn btn-primary" style="padding: 5px 10px; font-size: 0.71875rem; width: 100%; justify-content: center; background: #0F172A; border-color: #0F172A; color: white;" onclick="openComplaintDetailModal('${item.complaintId}')">
+          Inspect Details & Timeline →
+        </button>
+      </div>
+    `;
+
+    marker.bindPopup(popupContent);
+    complaintMarkersGroup.addLayer(marker);
+  });
+
+  if (bounds.length > 0 && !officerMarker) {
+    officerMap.fitBounds(bounds, { padding: [40, 40] });
+  }
+}
+
+function initOfficerGpsTracking() {
+  const gpsBtn = document.getElementById('btn-officer-gps');
+  if (!gpsBtn) return;
+
+  gpsBtn.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation API is not supported by your browser.');
+      return;
+    }
+
+    if (officerWatchId !== null) {
+      // Stop tracking
+      navigator.geolocation.clearWatch(officerWatchId);
+      officerWatchId = null;
+      gpsBtn.innerHTML = '📍 My Location (Live GPS)';
+      gpsBtn.style.background = 'var(--royal-blue)';
+      if (officerMarker && officerMap) {
+        officerMap.removeLayer(officerMarker);
+        officerMarker = null;
+      }
+      return;
+    }
+
+    gpsBtn.innerHTML = '<span class="btn-spinner" style="width: 12px; height: 12px; border-top-color: white;"></span> Acquiring GPS...';
+
+    officerWatchId = navigator.geolocation.watchPosition(
+      (pos) => {
+        const lat = parseFloat(pos.coords.latitude.toFixed(6));
+        const lng = parseFloat(pos.coords.longitude.toFixed(6));
+
+        gpsBtn.innerHTML = `<span style="color: #10B981; font-weight: 700;">🟢 Live GPS Active (${lat.toFixed(3)}°, ${lng.toFixed(3)}°)</span>`;
+        gpsBtn.style.background = '#0F172A';
+
+        if (officerMap) {
+          const officerIcon = L.divIcon({
+            className: 'officer-live-pin',
+            html: `<div style="background: #8B5CF6; width: 34px; height: 34px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 16px rgba(139, 92, 246, 0.9); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">👮</div>`,
+            iconSize: [34, 34],
+            iconAnchor: [17, 17]
+          });
+
+          if (!officerMarker) {
+            officerMarker = L.marker([lat, lng], { icon: officerIcon }).addTo(officerMap);
+            officerMarker.bindPopup("<strong>Officer Rajesh Kumar (Live Duty Position)</strong><br>GPS Telemetry Active");
+            officerMap.setView([lat, lng], 15);
+          } else {
+            officerMarker.setLatLng([lat, lng]);
+          }
+        }
+      },
+      (err) => {
+        console.warn("Officer GPS Tracking Error:", err.message);
+        gpsBtn.innerHTML = '⚠️ GPS Permission Denied';
+        officerWatchId = null;
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 3000 }
+    );
   });
 }
 

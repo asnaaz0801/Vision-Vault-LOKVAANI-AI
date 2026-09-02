@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Leaflet GIS Map Stylesheet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/home.css">
 </head>
@@ -380,18 +383,11 @@
             </button>
           </div>
 
-          <!-- Mini GIS Map Preview -->
-          <div class="mini-map-preview">
-            <svg class="mini-map-svg" viewBox="0 0 600 160" fill="none">
-              <path d="M20 30 L160 20 L280 70 L140 140 Z" stroke="#3B82F6" stroke-width="1.5" fill="rgba(59, 130, 246, 0.15)" />
-              <path d="M280 70 L460 40 L560 120 L380 150 Z" stroke="#3B82F6" stroke-width="1.5" fill="rgba(59, 130, 246, 0.2)" />
-              <path d="M0 90 Q 300 80 600 70" stroke="#00D2EE" stroke-width="2" stroke-dasharray="4 4" />
-            </svg>
-            <div class="mini-map-pin">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
-              <span class="mini-map-pin-tag" id="map-pin-label">Ward 12 • High-Accuracy Pin</span>
+          <!-- Interactive Leaflet GIS Map -->
+          <div class="citizen-map-wrapper" style="margin-top: 14px; position: relative;">
+            <div id="citizen-leaflet-map" style="height: 250px; width: 100%; border-radius: 12px; border: 1px solid var(--border-color); z-index: 1;"></div>
+            <div id="citizen-map-status" style="position: absolute; bottom: 10px; left: 10px; z-index: 1000; background: rgba(15, 23, 42, 0.88); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);">
+              📍 Click or drag pin to adjust exact complaint GPS coordinates
             </div>
           </div>
         </div>
@@ -424,11 +420,11 @@
             </div>
             <div class="preview-telemetry-item">
               <span class="preview-telemetry-key">Calculated Priority</span>
-              <div class="preview-telemetry-val" style="color: #F87171;" id="prev-priority">High (84/100)</div>
+              <div class="preview-telemetry-val" id="prev-priority"><span class="live-pulse-dot"></span> High (84/100)</div>
             </div>
             <div class="preview-telemetry-item">
               <span class="preview-telemetry-key">Expected SLA</span>
-              <div class="preview-telemetry-val" style="color: #60A5FA;" id="prev-sla">8 - 18 Hours</div>
+              <div class="preview-telemetry-val" id="prev-sla"><span class="live-pulse-dot"></span> 8 - 18 Hours</div>
             </div>
           </div>
 
@@ -452,8 +448,8 @@
               <span>Submit Complaint</span>
               <span class="btn-icon">&rarr;</span>
             </button>
-            <div style="font-size: 0.75rem; color: var(--text-inverse-muted); margin-top: 12px;">
-              🛡️ Geotagged and timestamped. Verified under municipal citizen charter.
+            <div class="submit-charter-note">
+              &#127963; Geotagged and timestamped. Verified under municipal citizen charter.
             </div>
           </div>
         </div>
@@ -525,6 +521,9 @@
       <div>© 2026 LokVaani AI. Citizen Grievance Redressal & Governance Intelligence Platform.</div>
     </div>
   </footer>
+
+  <!-- Leaflet GIS Map Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
   <!-- Supabase & Environment Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

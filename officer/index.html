@@ -17,6 +17,9 @@
   <!-- Link Shared Design Tokens & Stylesheet -->
   <link rel="stylesheet" href="../css/styles.css">
 
+  <!-- Leaflet GIS Map Stylesheet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- Dedicated Isolated Officer Portal Stylesheet -->
   <link rel="stylesheet" href="css/officer.css">
 </head>
@@ -223,6 +226,33 @@
               <div class="kpi-subtext" style="color: #DC2626;">
                 <span>🚨 Escalated to Senior Executive</span>
               </div>
+          </div>
+
+          <!-- FIELD GIS OPERATIONS MAP PANEL -->
+          <div class="section-panel" style="margin-bottom: 24px;">
+            <div class="panel-title-bar">
+              <div class="panel-title-group">
+                <div class="panel-title-icon">🗺️</div>
+                <div>
+                  <h3 class="panel-heading">Field GIS Operations Map</h3>
+                  <p class="view-subtitle" style="font-size: 0.8125rem;">Assigned complaint locations & officer live GPS dispatch tracking</p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <button class="btn btn-primary" id="btn-officer-gps" style="padding: 6px 14px; font-size: 0.8125rem; background: var(--royal-blue); border: 1px solid var(--royal-blue); font-weight: 700;">
+                  📍 My Location (Live GPS)
+                </button>
+              </div>
+            </div>
+
+            <div id="officer-leaflet-map" style="height: 340px; width: 100%; border-radius: 12px; border: 1px solid var(--border-subtle); z-index: 1;"></div>
+            
+            <div style="display: flex; gap: 16px; align-items: center; margin-top: 12px; font-size: 0.78125rem; color: var(--text-muted); flex-wrap: wrap;">
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #DC2626; display: inline-block;"></span> Critical / SLA Breached</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #F59E0B; display: inline-block;"></span> High Priority</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #3B82F6; display: inline-block;"></span> Medium Priority</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #10B981; display: inline-block;"></span> Low Priority</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 12px; height: 12px; border-radius: 50%; background: #8B5CF6; border: 2px solid white; display: inline-block;"></span> 👮 Officer Live Position</span>
             </div>
           </div>
 
@@ -723,6 +753,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/js/env-config.js"></script>
   <script src="../js/supabase-client.js"></script>
+  <!-- Leaflet GIS Map Library -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- JavaScript Modules -->
   <script src="js/officer-mock-data.js"></script>
   <script src="js/officer.js"></script>

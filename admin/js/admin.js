@@ -49,6 +49,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log(`🟢 Admin Portal: Loaded ${logResult.data.length} audit logs from Supabase.`);
       }
     } catch (err) { console.warn('Admin audit logs hydration fallback:', err); }
+
+    try {
+      const compResult = await getComplaintsFromDb();
+      if (compResult.success && compResult.data && compResult.data.length > 0) {
+        adminState.complaints = compResult.data;
+        console.log(`🟢 Admin Portal: Loaded ${compResult.data.length} city complaints.`);
+      }
+    } catch (err) { console.warn('Admin complaints hydration fallback:', err); }
   }
 
   initAdminNavigation();
@@ -58,6 +66,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   renderAdminCurrentView();
   initAdminModals();
   initControlCardGrid();
+  initAdminCityMap();
+  initAdminGpsButton();
 });
 
 /* ==========================================================================
@@ -287,6 +297,194 @@ function renderOverviewCommandCenter() {
   renderAiIntelligenceSection();
   renderMunicipalZoneMap();
   renderOfficerWatchlistAndTimeline();
+  if (typeof updateAdminMapData === 'function') updateAdminMapData();
+  if (adminMap) setTimeout(() => adminMap.invalidateSize(), 200);
+}
+
+/* ==========================================================================
+   ADMINISTRATOR LEAFLET CITY HEATMAP & MARKERS GIS ENGINE
+   ========================================================================== */
+let adminMap = null;
+let adminHeatLayer = null;
+let adminMarkersGroup = null;
+let adminCurrentMapFilter = 'all';
+let adminMapMode = 'both'; // 'heatmap' | 'markers' | 'both'
+let adminGpsMarker = null;
+
+function initAdminCityMap() {
+  const container = document.getElementById('admin-leaflet-map');
+  if (!container || typeof L === 'undefined') return;
+
+  if (!adminMap) {
+    try {
+      adminMap = L.map('admin-leaflet-map', { zoomControl: true }).setView([18.5204, 73.8567], 12);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(adminMap);
+
+      adminMarkersGroup = L.layerGroup().addTo(adminMap);
+    } catch (e) {
+      console.warn("Admin map initialization notice:", e);
+      return;
+    }
+  }
+
+  updateAdminMapData();
+  initAdminMapControls();
+}
+
+function getFilteredAdminComplaints() {
+  const allComplaints = adminState.complaints || INITIAL_COMPLAINTS || [];
+
+  return allComplaints.filter(c => {
+    if (adminCurrentMapFilter === 'all') return true;
+    if (adminCurrentMapFilter === 'critical') return c.priorityLevel === 'Critical' || c.severity === 'Critical';
+    if (adminCurrentMapFilter === 'breached') return c.slaState === 'SLA BREACHED' || c.status === 'SLA Breached';
+    if (adminCurrentMapFilter === 'water') return c.category && c.category.toLowerCase().includes('water');
+    if (adminCurrentMapFilter === 'roads') return c.category && (c.category.toLowerCase().includes('road') || c.category.toLowerCase().includes('pothole'));
+    if (adminCurrentMapFilter === 'waste') return c.category && (c.category.toLowerCase().includes('waste') || c.category.toLowerCase().includes('sanitation') || c.category.toLowerCase().includes('garbage'));
+    if (adminCurrentMapFilter === 'electricity') return c.category && (c.category.toLowerCase().includes('electric') || c.category.toLowerCase().includes('light'));
+    return true;
+  });
+}
+
+function updateAdminMapData() {
+  if (!adminMap) return;
+
+  if (adminMarkersGroup) adminMarkersGroup.clearLayers();
+  if (adminHeatLayer) {
+    adminMap.removeLayer(adminHeatLayer);
+    adminHeatLayer = null;
+  }
+
+  const complaints = getFilteredAdminComplaints();
+
+  // Generate Heatmap points [lat, lng, intensity]
+  const heatPoints = complaints.map((c, i) => {
+    const lat = parseFloat(c.latitude) || (18.5204 + (i * 0.005 - 0.012));
+    const lng = parseFloat(c.longitude) || (73.8567 + (i * 0.006 - 0.014));
+    const intensity = Math.min(1.0, Math.max(0.3, (c.priorityScore || 80) / 100));
+    return [lat, lng, intensity];
+  });
+
+  if (typeof L.heatLayer === 'function' && (adminMapMode === 'heatmap' || adminMapMode === 'both') && heatPoints.length > 0) {
+    adminHeatLayer = L.heatLayer(heatPoints, {
+      radius: 30,
+      blur: 20,
+      maxZoom: 15,
+      gradient: { 0.3: '#3B82F6', 0.65: '#FF9933', 1.0: '#DC2626' }
+    }).addTo(adminMap);
+  }
+
+  if (adminMapMode === 'markers' || adminMapMode === 'both') {
+    complaints.forEach((c, i) => {
+      const lat = parseFloat(c.latitude) || (18.5204 + (i * 0.005 - 0.012));
+      const lng = parseFloat(c.longitude) || (73.8567 + (i * 0.006 - 0.014));
+
+      const isCritical = c.slaState === 'SLA BREACHED' || c.priorityLevel === 'Critical' || c.severity === 'Critical';
+      const color = isCritical ? '#DC2626' :
+                    c.priorityLevel === 'High' ? '#FF9933' : '#3B82F6';
+
+      const iconHtml = `<div style="background: ${color}; width: 26px; height: 26px; border-radius: 50%; border: 2px solid #002147; box-shadow: 0 3px 8px rgba(0,0,0,0.4); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 10px;">${c.priorityScore || 80}</div>`;
+
+      const marker = L.marker([lat, lng], {
+        icon: L.divIcon({ className: 'admin-pin', html: iconHtml, iconSize: [26, 26], iconAnchor: [13, 13] })
+      });
+
+      marker.bindPopup(`
+        <div style="font-family: system-ui, sans-serif; color: #002147; padding: 4px; min-width: 190px;">
+          <div style="font-weight: 800; font-size: 0.875rem; color: #002147;">${c.complaintId}</div>
+          <div style="font-size: 0.78125rem; font-weight: 700; color: ${color}; margin: 2px 0;">${c.category || 'Grievance'}</div>
+          <div style="font-size: 0.75rem; color: #475569; margin-bottom: 6px;">📍 ${c.location}</div>
+          <div style="font-size: 0.71875rem; background: #F8FAFC; padding: 6px; border-radius: 6px; border: 1px solid #E2E8F0; color: #334155;">
+            <div>SLA: <strong style="color: ${color};">${c.slaState || 'ON TRACK'}</strong></div>
+            <div>Officer: <strong>${c.assignedOfficer || 'Er. Rajesh Kumar'}</strong></div>
+          </div>
+        </div>
+      `);
+
+      adminMarkersGroup.addLayer(marker);
+    });
+  }
+}
+
+function initAdminMapControls() {
+  const filterChips = document.querySelectorAll('#admin-map-filter-bar .map-filter-chip');
+  filterChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filterChips.forEach(c => {
+        c.classList.remove('active');
+        c.style.background = '';
+        c.style.color = '';
+      });
+      chip.classList.add('active');
+      chip.style.background = '#FF9933';
+      chip.style.color = '#000000';
+      chip.style.fontWeight = '800';
+
+      adminCurrentMapFilter = chip.getAttribute('data-filter') || 'all';
+      updateAdminMapData();
+    });
+  });
+
+  const toggleBtn = document.getElementById('btn-admin-map-mode');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      if (adminMapMode === 'both') adminMapMode = 'heatmap';
+      else if (adminMapMode === 'heatmap') adminMapMode = 'markers';
+      else adminMapMode = 'both';
+
+      toggleBtn.textContent = adminMapMode === 'both' ? '🔥 Heatmap + Markers' :
+                              adminMapMode === 'heatmap' ? '🔥 Heatmap Only' : '📍 Markers Only';
+
+      updateAdminMapData();
+    });
+  }
+}
+
+function initAdminGpsButton() {
+  const gpsBtn = document.getElementById('btn-admin-gps');
+  if (!gpsBtn) return;
+
+  gpsBtn.addEventListener('click', () => {
+    if (!navigator.geolocation) {
+      alert('Geolocation API is not supported by your browser.');
+      return;
+    }
+
+    gpsBtn.innerHTML = '<span class="btn-spinner" style="width: 12px; height: 12px; border-top-color: black;"></span> Locating...';
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const lat = parseFloat(pos.coords.latitude.toFixed(6));
+        const lng = parseFloat(pos.coords.longitude.toFixed(6));
+
+        gpsBtn.innerHTML = `<span style="color: black; font-weight: 800;">✓ Admin GPS: ${lat.toFixed(3)}°, ${lng.toFixed(3)}°</span>`;
+
+        if (adminMap) {
+          adminMap.setView([lat, lng], 15);
+
+          if (adminGpsMarker) adminMap.removeLayer(adminGpsMarker);
+
+          const adminIcon = L.divIcon({
+            className: 'admin-gps-pin',
+            html: `<div style="background: #FF9933; width: 34px; height: 34px; border-radius: 50%; border: 3px solid #002147; box-shadow: 0 0 16px rgba(255,153,51,0.9); display: flex; align-items: center; justify-content: center; color: #002147; font-weight: 900; font-size: 16px;">🏛️</div>`,
+            iconSize: [34, 34],
+            iconAnchor: [17, 17]
+          });
+
+          adminGpsMarker = L.marker([lat, lng], { icon: adminIcon }).addTo(adminMap);
+          adminGpsMarker.bindPopup("<strong>Municipal Administrator Command HQ</strong><br>Real-time location active").openPopup();
+        }
+      },
+      (err) => {
+        console.warn("Admin GPS Error:", err.message);
+        gpsBtn.innerHTML = '⚠️ GPS Unavailable';
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  });
 }
 
 function renderAttentionRequiredFeed() {
