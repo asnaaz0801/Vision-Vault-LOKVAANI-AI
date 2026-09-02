@@ -190,33 +190,10 @@
           </div>
         </div>
 
-        <!-- STEP 2: ISSUE UNDER DEPARTMENT -->
+        <!-- STEP 2: DYNAMIC SUBCATEGORY SELECTION -->
         <div class="form-section-card">
           <div class="form-section-header">
             <span class="step-badge-num">2</span>
-            <div class="form-section-title">
-              <h3>Issue Under Department</h3>
-              <span>Automatically determined based on municipal governance jurisdictions</span>
-            </div>
-          </div>
-
-          <div class="dept-routing-banner">
-            <div class="dept-tag-group">
-              <span class="dept-label-title">Assigned Municipal Authority:</span>
-              <span class="dept-name-val" id="selected-dept-name">Water Supply Department</span>
-            </div>
-
-            <div class="dept-metrics-row">
-              <span class="metric-pill metric-priority-high" id="selected-priority-pill">Priority: High (Urgent)</span>
-              <span class="metric-pill metric-sla" id="selected-sla-pill">Expected SLA: 4 - 12 Hours</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 3: DYNAMIC SUBCATEGORY SELECTION -->
-        <div class="form-section-card">
-          <div class="form-section-header">
-            <span class="step-badge-num">3</span>
             <div class="form-section-title">
               <h3>Dynamic Subcategory Selection</h3>
               <span>Select the exact issue type to ensure accurate technical triage</span>
@@ -228,10 +205,10 @@
           </div>
         </div>
 
-        <!-- STEP 4: ESTIMATED IMPACT -->
+        <!-- STEP 3: ESTIMATED IMPACT -->
         <div class="form-section-card">
           <div class="form-section-header">
-            <span class="step-badge-num">4</span>
+            <span class="step-badge-num">3</span>
             <div class="form-section-title">
               <h3>Estimated Impact</h3>
               <span>Helps AI calibrate urgency, prioritize resources, and trigger early escalations</span>
@@ -298,10 +275,10 @@
           </div>
         </div>
 
-        <!-- STEP 5: DESCRIBE YOUR ISSUE -->
+        <!-- STEP 4: DESCRIBE YOUR ISSUE -->
         <div class="form-section-card">
           <div class="form-section-header">
-            <span class="step-badge-num">5</span>
+            <span class="step-badge-num">4</span>
             <div class="form-section-title">
               <h3>Describe Your Issue</h3>
               <span>Provide written details, upload photo proof, or record a voice note</span>
@@ -322,6 +299,17 @@
             <div class="desc-counter-bar">
               <span>Vernacular text or dialect code-mixed phrases supported (Hindi, Marathi, English)</span>
               <span id="char-count" style="font-weight: 700; color: var(--navy-900);">0 / 500 characters</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: ADD EVIDENCE -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">5</span>
+            <div class="form-section-title">
+              <h3>Add Evidence</h3>
+              <span>Attach photographic proof or record a spoken voice grievance</span>
             </div>
           </div>
 
@@ -392,7 +380,30 @@
           </div>
         </div>
 
-        <!-- STEP 7: FULL-WIDTH AI COMPLAINT PREVIEW (Immediately before Submit button) -->
+        <!-- STEP 7: ISSUE UNDER DEPARTMENT -->
+        <div class="form-section-card" id="section-dept-routing">
+          <div class="form-section-header">
+            <span class="step-badge-num">7</span>
+            <div class="form-section-title">
+              <h3>Issue Under Department</h3>
+              <span>Automatically determined based on municipal governance jurisdictions</span>
+            </div>
+          </div>
+
+          <div class="dept-routing-banner">
+            <div class="dept-tag-group">
+              <span class="dept-label-title">Assigned Municipal Authority:</span>
+              <span class="dept-name-val" id="selected-dept-name">Water Supply Department</span>
+            </div>
+
+            <div class="dept-metrics-row">
+              <span class="metric-pill metric-priority-high" id="selected-priority-pill">Priority: High (Urgent)</span>
+              <span class="metric-pill metric-sla" id="selected-sla-pill">Expected SLA: 4 - 12 Hours</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 8: FULL-WIDTH AI COMPLAINT PREVIEW -->
         <div class="ai-preview-section-card">
           <div class="ai-preview-header">
             <span class="ai-preview-badge">

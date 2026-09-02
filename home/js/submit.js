@@ -217,6 +217,12 @@ function initSubmitFlow() {
       void step3Card.offsetWidth;
       step3Card.classList.add('step-revealed');
     }
+    const deptCard = document.getElementById('section-dept-routing');
+    if (deptCard) {
+      deptCard.classList.remove('step-revealed');
+      void deptCard.offsetWidth;
+      deptCard.classList.add('step-revealed');
+    }
 
     // Calculate priority & SLA
     calculatePriorityAndSla();
@@ -435,55 +441,85 @@ function initSubmitFlow() {
     });
   }
 
-  // 9. Location & Interactive Leaflet GIS Map
+  // 9. Location & Interactive Leaflet GIS Map with Live Reverse Geocoding
   let citizenMap = null;
   let citizenMarker = null;
   let selectedLat = 18.5204;
   let selectedLng = 73.8567;
+
+  async function fetchExactStreetAddress(lat, lng) {
+    const statusEl = document.getElementById('citizen-map-status');
+    if (statusEl) {
+      statusEl.innerHTML = `⏳ Resolving exact street address for <strong>${lat}° N, ${lng}° E</strong>...`;
+    }
+
+    try {
+      const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.display_name) {
+          const addrObj = data.address || {};
+          const streetPart = addrObj.road || addrObj.pedestrian || addrObj.suburb || addrObj.neighbourhood || addrObj.residential || '';
+          const cityPart = addrObj.city || addrObj.town || addrObj.village || addrObj.subdistrict || addrObj.county || '';
+          const statePart = addrObj.state || '';
+          const postPart = addrObj.postcode || '';
+
+          const shortAddress = [streetPart, cityPart, statePart, postPart].filter(Boolean).join(', ');
+          const finalAddress = shortAddress || data.display_name;
+
+          if (locationInput) {
+            locationInput.value = `${finalAddress} (${lat}° N, ${lng}° E)`;
+          }
+
+          if (statusEl) {
+            statusEl.innerHTML = `🟢 Exact Location Detected: <strong>${finalAddress}</strong>`;
+          }
+          calculatePriorityAndSla();
+          return finalAddress;
+        }
+      }
+    } catch (e) {
+      console.warn("Reverse geocode notice:", e);
+    }
+
+    if (statusEl) {
+      statusEl.innerHTML = `📍 GPS Coordinates Pin: <strong>${lat}° N, ${lng}° E</strong>`;
+    }
+  }
 
   function initCitizenLeafletMap() {
     const mapContainer = document.getElementById('citizen-leaflet-map');
     if (!mapContainer || typeof L === 'undefined') return;
 
     try {
-      citizenMap = L.map('citizen-leaflet-map', { zoomControl: true }).setView([selectedLat, selectedLng], 14);
+      citizenMap = L.map('citizen-leaflet-map', { zoomControl: true }).setView([selectedLat, selectedLng], 15);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(citizenMap);
 
       const customIcon = L.divIcon({
         className: 'citizen-custom-pin',
-        html: `<div style="background: #3B82F6; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 14px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; color: white; font-size: 16px;">📍</div>`,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32]
+        html: `<div style="background: #3B82F6; width: 34px; height: 34px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 16px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; animation: pulse 2s infinite;">📍</div>`,
+        iconSize: [34, 34],
+        iconAnchor: [17, 34]
       });
 
       citizenMarker = L.marker([selectedLat, selectedLng], { draggable: true, icon: customIcon }).addTo(citizenMap);
 
-      function updatePinCoordinates(lat, lng) {
-        selectedLat = parseFloat(lat.toFixed(6));
-        selectedLng = parseFloat(lng.toFixed(6));
-
-        const statusEl = document.getElementById('citizen-map-status');
-        if (statusEl) {
-          statusEl.innerHTML = `📍 Map Pin GPS: <strong>${selectedLat}° N, ${selectedLng}° E</strong>`;
-        }
-
-        if (locationInput && !locationInput.value.trim()) {
-          locationInput.value = `Sector 12, Station Road (${selectedLat}° N, ${selectedLng}° E)`;
-        }
-        calculatePriorityAndSla();
-      }
-
-      citizenMarker.on('dragend', (e) => {
+      citizenMarker.on('dragend', async (e) => {
         const pos = e.target.getLatLng();
-        updatePinCoordinates(pos.lat, pos.lng);
+        selectedLat = parseFloat(pos.lat.toFixed(6));
+        selectedLng = parseFloat(pos.lng.toFixed(6));
+        await fetchExactStreetAddress(selectedLat, selectedLng);
       });
 
-      citizenMap.on('click', (e) => {
+      citizenMap.on('click', async (e) => {
         citizenMarker.setLatLng(e.latlng);
-        updatePinCoordinates(e.latlng.lat, e.latlng.lng);
+        selectedLat = parseFloat(e.latlng.lat.toFixed(6));
+        selectedLng = parseFloat(e.latlng.lng.toFixed(6));
+        await fetchExactStreetAddress(selectedLat, selectedLng);
       });
     } catch (err) {
       console.warn("Leaflet map init notice:", err);
@@ -502,28 +538,23 @@ function initSubmitFlow() {
         return;
       }
 
-      gpsBtn.innerHTML = '<span class="btn-spinner" style="border-top-color: var(--royal-blue); width: 14px; height: 14px;"></span> Acquiring Live GPS...';
+      gpsBtn.innerHTML = '<span class="btn-spinner" style="border-top-color: var(--royal-blue); width: 14px; height: 14px;"></span> Detecting Exact GPS...';
 
       navigator.geolocation.getCurrentPosition(
-        (position) => {
+        async (position) => {
           selectedLat = parseFloat(position.coords.latitude.toFixed(6));
           selectedLng = parseFloat(position.coords.longitude.toFixed(6));
 
-          if (locationInput) {
-            locationInput.value = `Station Road near Ward 12 (${selectedLat}° N, ${selectedLng}° E)`;
-          }
-
-          gpsBtn.innerHTML = '<span style="color: var(--civic-green); font-weight: 700;">✓ Live GPS Acquired</span>';
-
+          // Zoom to high resolution street level (zoom 17)
           if (citizenMap && citizenMarker) {
-            citizenMap.setView([selectedLat, selectedLng], 16);
+            citizenMap.setView([selectedLat, selectedLng], 17);
             citizenMarker.setLatLng([selectedLat, selectedLng]);
-            const statusEl = document.getElementById('citizen-map-status');
-            if (statusEl) {
-              statusEl.innerHTML = `🟢 Live GPS Acquired: <strong>${selectedLat}° N, ${selectedLng}° E</strong> (Accuracy: ±${Math.round(position.coords.accuracy)}m)`;
-            }
           }
-          calculatePriorityAndSla();
+
+          gpsBtn.innerHTML = '<span style="color: var(--civic-green); font-weight: 700;">✓ Exact GPS Acquired</span>';
+
+          // Perform reverse geocoding for exact street address
+          await fetchExactStreetAddress(selectedLat, selectedLng);
         },
         (error) => {
           console.warn('Citizen GPS Error:', error.message);
@@ -532,14 +563,13 @@ function initSubmitFlow() {
           if (error.code === error.TIMEOUT) errText = 'GPS Request Timed Out';
 
           gpsBtn.innerHTML = `<span style="color: #EF4444;">⚠️ ${errText}</span>`;
-          alert(`${errText}. Defaulting to Ward 12 center coordinates. You can click or drag the pin on the interactive map.`);
+          alert(`${errText}. Defaulting to Ward 12 center coordinates. You can click or drag the pin on the map to set your exact location.`);
 
-          // Fallback view
           if (locationInput && !locationInput.value) {
             locationInput.value = `Sector 12, Station Road (18.5204° N, 73.8567° E)`;
           }
         },
-        { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
       );
     });
 
