@@ -754,38 +754,48 @@ function updateComplaintStatus(complaintId, newStatus, logText) {
 /* ==========================================================================
    8. RESOLUTION WORKFLOW MODAL
    ========================================================================== */
+/* ==========================================================================
+   8. RESOLUTION & ESCALATION WORKFLOW MODALS
+   ========================================================================== */
 function openResolutionModal(complaintId) {
+  appState.selectedComplaintId = complaintId;
   const resModal = document.getElementById('resolution-modal');
   if (!resModal) return;
 
-  document.getElementById('res-complaint-id-text').textContent = complaintId;
+  const textEl = document.getElementById('res-complaint-id-text');
+  if (textEl) textEl.textContent = complaintId;
   resModal.classList.add('active');
 }
 
 function openEscalationModal(complaintId) {
+  appState.selectedComplaintId = complaintId;
   const escModal = document.getElementById('escalation-modal');
   if (!escModal) return;
 
-  document.getElementById('esc-complaint-id-text').textContent = complaintId;
+  const textEl = document.getElementById('esc-complaint-id-text');
+  if (textEl) textEl.textContent = complaintId;
   escModal.classList.add('active');
 }
 
 function initModals() {
-  // Resolution form submit
+  // Resolution form submit handler
   const resForm = document.getElementById('resolution-form');
   if (resForm) {
-    resForm.addEventListener('submit', (e) => {
+    resForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const actionTaken = document.getElementById('res-action-taken').value;
-      const note = document.getElementById('res-note-input').value;
+      const noteInput = document.getElementById('res-note-input');
+      const note = noteInput ? noteInput.value.trim() : '';
 
       if (!note) {
-        alert('Please provide a brief resolution description.');
+        alert('Please enter a brief field engineer resolution note.');
+        if (noteInput) noteInput.focus();
         return;
       }
 
-      const complaintId = appState.selectedComplaintId;
-      const complaint = appState.complaints.find(c => c.complaintId === complaintId);
+      const modalIdText = document.getElementById('res-complaint-id-text') ? document.getElementById('res-complaint-id-text').textContent.trim() : null;
+      const complaintId = appState.selectedComplaintId || modalIdText;
+      const complaint = appState.complaints.find(c => c.complaintId === complaintId || c.referenceCode === complaintId);
 
       if (complaint) {
         complaint.status = 'Resolved';
@@ -794,6 +804,7 @@ function initModals() {
         complaint.updatedAt = 'Just Now';
 
         const nowStr = 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (!complaint.activityTimeline) complaint.activityTimeline = [];
         complaint.activityTimeline.push({
           title: 'Complaint Resolved & Work Verified',
           timestamp: nowStr,
@@ -801,24 +812,40 @@ function initModals() {
           icon: '✅'
         });
 
+        // Persist to Supabase DB & localStorage for instant Citizen Portal update!
+        if (typeof updateComplaintInDb === 'function') {
+          try {
+            await updateComplaintInDb(complaint.complaintId || complaintId, {
+              status: 'Resolved',
+              resolutionNote: `${actionTaken}: ${note}`,
+              resolutionProof: 'Geotagged_Field_Photo_Verified.jpg'
+            });
+          } catch (err) {
+            console.warn("Failed to persist resolution to DB:", err);
+          }
+        }
+
         document.getElementById('resolution-modal').classList.remove('active');
         renderCurrentView();
-        openComplaintDetailModal(complaintId);
-        showToastNotification(`Ticket #${complaintId} successfully resolved and archived!`);
+        openComplaintDetailModal(complaint.complaintId || complaintId);
+        showToastNotification(`Ticket #${complaint.complaintId || complaintId} successfully resolved and archived!`);
+      } else {
+        alert(`Could not find complaint #${complaintId} in state.`);
       }
     });
   }
 
-  // Escalation form submit
+  // Escalation form submit handler
   const escForm = document.getElementById('escalation-form');
   if (escForm) {
-    escForm.addEventListener('submit', (e) => {
+    escForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const targetOfficer = document.getElementById('esc-target-officer').value;
       const reason = document.getElementById('esc-reason-input').value;
 
-      const complaintId = appState.selectedComplaintId;
-      const complaint = appState.complaints.find(c => c.complaintId === complaintId);
+      const modalIdText = document.getElementById('esc-complaint-id-text') ? document.getElementById('esc-complaint-id-text').textContent.trim() : null;
+      const complaintId = appState.selectedComplaintId || modalIdText;
+      const complaint = appState.complaints.find(c => c.complaintId === complaintId || c.referenceCode === complaintId);
 
       if (complaint) {
         complaint.status = 'Escalated';
@@ -826,6 +853,7 @@ function initModals() {
         complaint.updatedAt = 'Just Now';
 
         const nowStr = 'Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        if (!complaint.activityTimeline) complaint.activityTimeline = [];
         complaint.activityTimeline.push({
           title: `Escalated to ${targetOfficer}`,
           timestamp: nowStr,
@@ -833,10 +861,19 @@ function initModals() {
           icon: '🚀'
         });
 
+        if (typeof updateComplaintInDb === 'function') {
+          try {
+            await updateComplaintInDb(complaint.complaintId || complaintId, {
+              status: 'Escalated',
+              slaState: 'SLA BREACHED'
+            });
+          } catch (err) {}
+        }
+
         document.getElementById('escalation-modal').classList.remove('active');
         renderCurrentView();
-        openComplaintDetailModal(complaintId);
-        showToastNotification(`Ticket #${complaintId} escalated to ${targetOfficer}.`);
+        openComplaintDetailModal(complaint.complaintId || complaintId);
+        showToastNotification(`Ticket #${complaint.complaintId || complaintId} escalated to ${targetOfficer}.`);
       }
     });
   }
