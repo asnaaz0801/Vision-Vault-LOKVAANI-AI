@@ -204,6 +204,20 @@ function initSubmitFlow() {
     // Step 3: Populate Subcategories
     renderSubcategories(cat.subcategories);
 
+    // Trigger smooth step reveal animation on steps 2 & 3
+    const step2Card = document.querySelector('.form-section-card:nth-of-type(2)');
+    const step3Card = document.querySelector('.form-section-card:nth-of-type(3)');
+    if (step2Card) {
+      step2Card.classList.remove('step-revealed');
+      void step2Card.offsetWidth;
+      step2Card.classList.add('step-revealed');
+    }
+    if (step3Card) {
+      step3Card.classList.remove('step-revealed');
+      void step3Card.offsetWidth;
+      step3Card.classList.add('step-revealed');
+    }
+
     // Calculate priority & SLA
     calculatePriorityAndSla();
   }
@@ -310,11 +324,11 @@ function initSubmitFlow() {
 
     // Update Step 2 Pills
     if (priorityPillEl) {
-      priorityPillEl.textContent = `Priority: ${priorityLabel} (${baseScore}/100)`;
+      priorityPillEl.innerHTML = `<span class="live-pulse-dot"></span> Priority: ${priorityLabel} (${baseScore}/100)`;
       priorityPillEl.className = `metric-pill ${priorityClass}`;
     }
     if (slaPillEl) {
-      slaPillEl.textContent = `Expected SLA: ${slaHours}`;
+      slaPillEl.innerHTML = `<span class="live-pulse-dot" style="background: #3B82F6;"></span> Expected SLA: ${slaHours}`;
     }
 
     // Update Step 7 Preview Card
@@ -329,8 +343,8 @@ function initSubmitFlow() {
     if (prevCat) prevCat.textContent = `${cat.icon} ${cat.name}`;
     if (prevSubcat) prevSubcat.textContent = currentSubcategory;
     if (prevDept) prevDept.textContent = cat.department;
-    if (prevPriority) prevPriority.textContent = `${priorityLabel} (${score}/100)`;
-    if (prevSla) prevSla.textContent = slaHours;
+    if (prevPriority) prevPriority.innerHTML = `<span class="live-pulse-dot"></span> ${priorityLabel} (${score}/100)`;
+    if (prevSla) prevSla.innerHTML = `<span class="live-pulse-dot" style="background: #60A5FA;"></span> ${slaHours}`;
 
     const userDesc = descTextarea ? descTextarea.value.trim() : '';
     const userLoc = locationInput && locationInput.value.trim() ? locationInput.value.trim() : 'Ward 12 Municipal Jurisdiction';
@@ -344,6 +358,15 @@ function initSubmitFlow() {
 
     if (prevSummary) {
       prevSummary.textContent = `"${summaryText}"`;
+    }
+
+    // Subtle AI-style animated highlight scan
+    const previewCard = document.querySelector('.ai-preview-section-card');
+    if (previewCard) {
+      previewCard.classList.remove('ai-preview-updating');
+      void previewCard.offsetWidth; // Force CSS reflow
+      previewCard.classList.add('ai-preview-updating');
+      setTimeout(() => previewCard.classList.remove('ai-preview-updating'), 600);
     }
   }
 
@@ -416,7 +439,7 @@ function initSubmitFlow() {
   if (gpsBtn && locationInput) {
     gpsBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      gpsBtn.textContent = 'Acquiring GPS...';
+      gpsBtn.innerHTML = '<span class="btn-spinner" style="border-top-color: var(--royal-blue); width: 14px; height: 14px;"></span> Acquiring GPS...';
       setTimeout(() => {
         locationInput.value = 'Station Road near Metro Pillar 42, Ward 12 (18.5204° N, 73.8567° E)';
         gpsBtn.innerHTML = '<span style="color: var(--civic-green);">✓ GPS Locked</span>';
@@ -445,30 +468,101 @@ function initSubmitFlow() {
         return;
       }
 
-      submitBtn.textContent = 'Submitting to LokVaani AI...';
+      // Button press / loading state
+      submitBtn.classList.add('is-loading');
+      submitBtn.innerHTML = '<span class="btn-spinner"></span> <span>Submitting to LokVaani AI...</span>';
       submitBtn.disabled = true;
 
-      setTimeout(() => {
+      // Smooth form fade out
+      if (mainForm) {
+        mainForm.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+        mainForm.style.opacity = '0';
+        mainForm.style.transform = 'translateY(-14px)';
+      }
+
+      // Async Supabase insert + UI transition
+      (async () => {
         const cat = categoryData[currentCategory];
         const randomNum = Math.floor(1000 + Math.random() * 9000);
-        const ticketId = `LOK-2026-${randomNum}`;
+        const ticketId = `LV-${randomNum}`;
+        const userDesc = descTextarea ? descTextarea.value.trim() : '';
+        const userLoc = locationInput && locationInput.value.trim() ? locationInput.value.trim() : 'Sector 12 (Ward 12)';
 
-        if (successTicketId) successTicketId.textContent = ticketId;
+        // Determine priority/SLA from current UI state
+        let pScore = 82, pLevel = 'High', slaH = 24;
+        if (currentImpactLevel === 'critical') { pScore = 95; pLevel = 'Critical'; slaH = 4; }
+        else if (currentImpactLevel === 'high') { pScore = 84; pLevel = 'High'; slaH = 24; }
+        else if (currentImpactLevel === 'medium') { pScore = 68; pLevel = 'Medium'; slaH = 48; }
+        else if (currentImpactLevel === 'low') { pScore = 48; pLevel = 'Low'; slaH = 72; }
+
+        const complaintPayload = {
+          complaintId: ticketId,
+          citizenName: 'LokVaani Citizen',
+          citizenContact: '+91 98000 00000',
+          description: userDesc || `${cat.name} issue: ${currentSubcategory}`,
+          category: `${cat.name} — ${currentSubcategory}`,
+          department: cat.department,
+          location: userLoc,
+          latitude: 18.5204,
+          longitude: 73.8567,
+          zone: 'Zone 4',
+          priorityScore: pScore,
+          priorityLevel: pLevel,
+          severity: pLevel,
+          sentiment: 'Concerned',
+          aiSummary: `Citizen report for ${cat.name} (${currentSubcategory}) at ${userLoc}.`,
+          slaHours: slaH
+        };
+
+        // Upload photo to Supabase Storage if available
+        let photoUrl = '';
+        if (photoInput && photoInput.files && photoInput.files[0] && typeof isSupabaseConnected === 'function' && isSupabaseConnected()) {
+          try {
+            const file = photoInput.files[0];
+            const fileName = `${ticketId}_${Date.now()}_${file.name}`;
+            const { data: upData, error: upError } = await supabaseClient
+              .storage
+              .from('complaint-photos')
+              .upload(fileName, file, { cacheControl: '3600', upsert: false });
+            if (!upError && upData) {
+              const { data: urlData } = supabaseClient.storage.from('complaint-photos').getPublicUrl(fileName);
+              photoUrl = urlData ? urlData.publicUrl : '';
+              console.log('🟢 Photo uploaded to Supabase Storage:', photoUrl);
+            } else {
+              console.warn('Photo upload skipped (bucket may not exist yet):', upError);
+            }
+          } catch (photoErr) {
+            console.warn('Photo upload error (non-fatal):', photoErr);
+          }
+        }
+
+        // Save to Supabase database
+        let dbResult = { mock: true };
+        if (typeof createComplaintInDb === 'function') {
+          dbResult = await createComplaintInDb(complaintPayload);
+          if (dbResult.success && !dbResult.mock) {
+            console.log('🟢 Complaint saved to Supabase DB:', dbResult.referenceCode || ticketId);
+          }
+        }
+
+        const finalTicketId = (dbResult.referenceCode) || ticketId;
+
+        if (successTicketId) successTicketId.textContent = finalTicketId;
         if (successDept) successDept.textContent = cat.department;
-        if (successPriority) successPriority.textContent = prevPriority ? prevPriority.textContent : 'High';
-        if (successSla) successSla.textContent = prevSla ? prevSla.textContent : '12 - 24 Hours';
+        if (successPriority) successPriority.innerHTML = `<span class="live-pulse-dot"></span> ${prevPriority ? prevPriority.textContent : 'High'}`;
+        if (successSla) successSla.innerHTML = `<span class="live-pulse-dot" style="background: var(--royal-blue);"></span> ${prevSla ? prevSla.textContent : '12 - 24 Hours'}`;
 
         const successTrackBtn = document.getElementById('btn-success-track');
         if (successTrackBtn) {
-          successTrackBtn.href = `track.html?id=${ticketId}`;
+          successTrackBtn.href = `track.html?id=${finalTicketId}`;
         }
 
         if (mainForm) mainForm.style.display = 'none';
         if (successView) {
           successView.classList.add('active');
-          window.scrollTo({ top: successView.offsetTop - 80, behavior: 'smooth' });
+          successView.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }, 700);
+      })();
     });
   }
 

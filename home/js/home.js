@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initIssueReportingModal();
   initTrackComplaintModal();
   initHelpModal();
+  initScrollReveal();
 });
 
 /* ==========================================================================
@@ -124,40 +125,196 @@ function initCounters() {
 }
 
 /* ==========================================================================
-   3. HERO CIVIC INTELLIGENCE NETWORK INTERACTION
+   3. HERO CIVIC INTELLIGENCE INTERACTIVE COMMAND CENTER
    ========================================================================== */
 function initHeroVisual() {
   const civicNodes = document.querySelectorAll('.civic-node');
-  const aiCoreText = document.querySelector('.ai-core-text');
-  const aiCoreSub = document.querySelector('.ai-core-sub');
+  const aiHubCore = document.getElementById('ai-neural-hub-core');
+  const aiHubStatusLabel = document.getElementById('ai-hub-status-label');
 
+  // Dynamic Telemetry Card elements
+  const tcCatIcon = document.getElementById('tc-cat-icon');
+  const tcCatTitle = document.getElementById('tc-cat-title');
+  const tcDeptName = document.getElementById('tc-dept-name');
+  const tcAiStatus = document.getElementById('tc-ai-status');
+  const tcActiveCount = document.getElementById('tc-active-count');
+  const tcUrgentCount = document.getElementById('tc-urgent-count');
+  const tcSlaTime = document.getElementById('tc-sla-time');
+  const nodeTelemetryBanner = document.getElementById('node-telemetry-banner');
+
+  // Live Animated Counters
+  const cmdAnalyzed = document.getElementById('cmd-stat-analyzed');
+
+  // Node telemetry mock database
   const nodeData = {
-    water: { title: 'Jal Board', status: 'Active Telemetry', ping: 'Pipeline 4-B' },
-    roads: { title: 'PWD Roads', status: 'Vision Triage', ping: 'Surface Defect' },
-    waste: { title: 'Solid Waste', status: 'Geo-Cluster', ping: 'Bin Overflow' },
-    lights: { title: 'Electrical', status: 'Grid Link', ping: 'Luminaire 14' },
-    drainage: { title: 'Stormwater', status: 'Sensing', ping: 'Culvert Clear' },
-    location: { title: 'GIS Engine', status: 'Polygon Map', ping: 'Ward 12 Centroid' }
+    water: {
+      category: 'Water Supply & Pipeline Infra',
+      icon: '💧',
+      dept: 'Water Supply Department',
+      activeComplaints: '142 Active',
+      urgentIssues: '18 Critical',
+      sla: '4 - 12 Hours',
+      aiStatus: '🟢 NLP Triage & Leak Detection Active (99.4%)',
+      hubPulseText: 'WATER CELL'
+    },
+    roads: {
+      category: 'Roads, Potholes & Transit Corridors',
+      icon: '🚧',
+      dept: 'Public Works Department (PWD)',
+      activeComplaints: '286 Active',
+      urgentIssues: '34 High Severity',
+      sla: '8 - 24 Hours',
+      aiStatus: '🟢 CV Pothole Dimensioning Online (97.8%)',
+      hubPulseText: 'PWD ROADS'
+    },
+    drainage: {
+      category: 'Drainage, Stormwater & Sewerage',
+      icon: '🌊',
+      dept: 'Drainage & Sewerage Department',
+      activeComplaints: '97 Active',
+      urgentIssues: '14 Flood Hazard',
+      sla: '6 - 18 Hours',
+      aiStatus: '🟢 Waterlogging Predictive Model Linked',
+      hubPulseText: 'DRAINAGE'
+    },
+    location: {
+      category: 'Geospatial Ward GIS Cluster',
+      icon: '📍',
+      dept: 'Zonal Geo-Intelligence Cell',
+      activeComplaints: '520 Total Wards',
+      urgentIssues: '28 Spatial Density Alerts',
+      sla: 'Real-Time Sync',
+      aiStatus: '🟢 200m Deduplication Clustering Live',
+      hubPulseText: 'GIS WARD'
+    },
+    lights: {
+      category: 'Street Lights & Grid Luminaire',
+      icon: '💡',
+      dept: 'Electrical Department',
+      activeComplaints: '118 Active',
+      urgentIssues: '9 Dark Spot Alerts',
+      sla: '12 - 24 Hours',
+      aiStatus: '🟢 IoT Grid Telemetry Synchronized',
+      hubPulseText: 'GRID CELL'
+    },
+    waste: {
+      category: 'Solid Waste & Sanitation Hygiene',
+      icon: '🗑️',
+      dept: 'Sanitation Department',
+      activeComplaints: '215 Active',
+      urgentIssues: '22 Biohazard Clusters',
+      sla: '4 - 12 Hours',
+      aiStatus: '🟢 Bin Overflow Classification Active',
+      hubPulseText: 'SANITATION'
+    }
   };
 
-  civicNodes.forEach(node => {
-    node.addEventListener('mouseenter', () => {
-      const domain = node.getAttribute('data-domain');
-      if (nodeData[domain] && aiCoreText && aiCoreSub) {
-        aiCoreText.textContent = nodeData[domain].title;
-        aiCoreSub.textContent = nodeData[domain].status;
-        civicNodes.forEach(n => n.classList.remove('active'));
-        node.classList.add('active');
-      }
+  // Node Selection Function
+  function selectCivicNode(nodeKey) {
+    const data = nodeData[nodeKey];
+    if (!data) return;
+
+    // Toggle active classes on nodes
+    civicNodes.forEach(node => {
+      const isMatch = (node.getAttribute('data-node') || node.getAttribute('data-domain')) === nodeKey;
+      node.classList.toggle('active', isMatch);
     });
 
-    node.addEventListener('mouseleave', () => {
-      if (aiCoreText && aiCoreSub) {
-        aiCoreText.textContent = 'AI';
-        aiCoreSub.textContent = 'NEURAL HUB';
+    // Update connection stream line
+    const allLines = document.querySelectorAll('.network-svg-lines line');
+    allLines.forEach(line => line.classList.remove('stream-selected'));
+    const targetLine = document.getElementById(`line-${nodeKey}`);
+    if (targetLine) {
+      targetLine.classList.add('stream-selected');
+    }
+
+    // Update Telemetry Card with smooth flash
+    if (nodeTelemetryBanner) {
+      nodeTelemetryBanner.style.opacity = '0.7';
+      setTimeout(() => {
+        if (tcCatIcon) tcCatIcon.textContent = data.icon;
+        if (tcCatTitle) tcCatTitle.textContent = data.category;
+        if (tcDeptName) tcDeptName.textContent = data.dept;
+        if (tcAiStatus) tcAiStatus.textContent = data.aiStatus;
+        if (tcActiveCount) tcActiveCount.textContent = data.activeComplaints;
+        if (tcUrgentCount) tcUrgentCount.textContent = data.urgentIssues;
+        if (tcSlaTime) tcSlaTime.textContent = data.sla;
+
+        nodeTelemetryBanner.style.opacity = '1';
+      }, 100);
+    }
+
+    // Update Hub Status Label
+    if (aiHubStatusLabel) {
+      aiHubStatusLabel.textContent = data.hubPulseText || 'ACTIVE';
+    }
+  }
+
+  // Bind click & hover events to nodes
+  civicNodes.forEach(node => {
+    node.addEventListener('click', () => {
+      const nodeKey = node.getAttribute('data-node') || node.getAttribute('data-domain');
+      selectCivicNode(nodeKey);
+    });
+  });
+
+  // Clicking the central AI Hub triggers location cluster
+  if (aiHubCore) {
+    aiHubCore.addEventListener('click', () => {
+      selectCivicNode('location');
+    });
+  }
+
+  // Interactive Bottom Pipeline
+  const pipelineBtns = document.querySelectorAll('.pipeline-step-btn');
+  const expIndicator = document.getElementById('exp-step-indicator');
+  const expDesc = document.getElementById('pipeline-step-description');
+
+  const pipelineExplanations = {
+    '1': {
+      indicator: 'STEP 1 OF 5 • INTAKE',
+      text: '<strong>Citizen Intake:</strong> Multi-channel intake via text, voice notes (Bhashini dialect AI), geotagged photos, and WhatsApp helpline.'
+    },
+    '2': {
+      indicator: 'STEP 2 OF 5 • AI CLASSIFICATION',
+      text: '<strong>AI Triage:</strong> Semantic NLP categorizes civic grievances, checks duplicate clusters within 200m, and flags root causes with 98.6% precision.'
+    },
+    '3': {
+      indicator: 'STEP 3 OF 5 • SEVERITY SCORING',
+      text: '<strong>Priority Engine:</strong> Dynamic severity score (0–100) automatically weighted by safety hazards, vulnerable populations, and hospital corridors.'
+    },
+    '4': {
+      indicator: 'STEP 4 OF 5 • SLA DISPATCH',
+      text: '<strong>Auto-Assignment:</strong> Algorithmic routing directly to the responsible jurisdictional field officer with strict digital citizen charter SLA timers.'
+    },
+    '5': {
+      indicator: 'STEP 5 OF 5 • VERIFIED CLOSURE',
+      text: '<strong>Resolution Audit:</strong> Officer uploads geotagged before-after photo proof; citizen receives completion SMS with automated satisfaction survey.'
+    }
+  };
+
+  pipelineBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const step = btn.getAttribute('data-step');
+      pipelineBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      if (pipelineExplanations[step]) {
+        if (expIndicator) expIndicator.textContent = pipelineExplanations[step].indicator;
+        if (expDesc) expDesc.innerHTML = pipelineExplanations[step].text;
       }
     });
   });
+
+  // Live animated telemetry counters ticking
+  function animateLiveHubCounters() {
+    let analyzed = 42850;
+    setInterval(() => {
+      analyzed += Math.floor(Math.random() * 3);
+      if (cmdAnalyzed) cmdAnalyzed.textContent = `${analyzed.toLocaleString('en-IN')}+`;
+    }, 4500);
+  }
+  animateLiveHubCounters();
 }
 
 /* ==========================================================================
@@ -642,4 +799,32 @@ function initHelpModal() {
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.remove('active');
   });
+}
+
+/* ==========================================================================
+   11. SCROLL REVEAL & MICRO-INTERACTIONS
+   ========================================================================== */
+function initScrollReveal() {
+  if ('IntersectionObserver' in window) {
+    const revealTargets = document.querySelectorAll(
+      '.feature-card, .process-step-item, .pillar-card, .faq-item, .stat-counter-card, .ai-output-box, .gis-map-viewport, .architecture-layer, .cta-box-content'
+    );
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          obs.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.08
+    });
+
+    revealTargets.forEach(target => {
+      target.classList.add('scroll-reveal');
+      observer.observe(target);
+    });
+  }
 }

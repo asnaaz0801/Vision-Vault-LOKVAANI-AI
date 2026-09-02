@@ -18,7 +18,25 @@ let appState = {
   }
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Hydrate complaints from Supabase if connected, else use mock
+  if (typeof getComplaintsFromDb === 'function') {
+    try {
+      const result = await getComplaintsFromDb();
+      if (result.success && result.source === 'supabase' && result.data.length > 0) {
+        // Merge Supabase data with mock data for comprehensive display
+        const supabaseIds = new Set(result.data.map(c => c.complaintId));
+        const mockOnly = INITIAL_COMPLAINTS.filter(c => !supabaseIds.has(c.complaintId));
+        appState.complaints = [...result.data, ...mockOnly];
+        console.log(`🟢 Officer Portal: Loaded ${result.data.length} complaints from Supabase + ${mockOnly.length} mock.`);
+      } else {
+        console.log('ℹ️ Officer Portal: Using mock complaint data.');
+      }
+    } catch (err) {
+      console.warn('Officer Portal Supabase hydration failed, using mock data:', err);
+    }
+  }
+
   initNavigation();
   initSearchAndFilters();
   initSlaClockEngine();

@@ -323,21 +323,34 @@ function initTrackFlow() {
 
   // 4. Perform Search Function
   function performSearch(query) {
-    let complaint = null;
-    const cleanQuery = query.toUpperCase();
-
-    // Check direct match
-    if (complaintsDb[cleanQuery]) {
-      complaint = complaintsDb[cleanQuery];
-    } else if (currentSearchMode === 'phone' || query.length === 10) {
-      // Mobile search simulation: maps to LOK-2026-7853
-      complaint = complaintsDb['LOK-2026-7853'];
-    } else {
-      // Dynamic fallback generator for any custom ID entered by user!
-      complaint = generateDynamicRecord(cleanQuery);
+    const submitTrackBtn = document.getElementById('btn-track-submit');
+    if (submitTrackBtn) {
+      submitTrackBtn.classList.add('is-loading');
+      submitTrackBtn.innerHTML = '<span class="btn-spinner"></span> <span>Tracking...</span>';
     }
 
-    renderComplaint(complaint);
+    setTimeout(() => {
+      let complaint = null;
+      const cleanQuery = query.toUpperCase();
+
+      // Check direct match
+      if (complaintsDb[cleanQuery]) {
+        complaint = complaintsDb[cleanQuery];
+      } else if (currentSearchMode === 'phone' || query.length === 10) {
+        // Mobile search simulation: maps to LOK-2026-7853
+        complaint = complaintsDb['LOK-2026-7853'];
+      } else {
+        // Dynamic fallback generator for any custom ID entered by user!
+        complaint = generateDynamicRecord(cleanQuery);
+      }
+
+      if (submitTrackBtn) {
+        submitTrackBtn.classList.remove('is-loading');
+        submitTrackBtn.innerHTML = '<span>Track Request</span> <span class="btn-icon">&rarr;</span>';
+      }
+
+      renderComplaint(complaint);
+    }, 280);
   }
 
   // Fallback dynamic generator
@@ -419,13 +432,17 @@ function initTrackFlow() {
     if (emptyState) emptyState.style.display = 'none';
     if (resultsContainer) {
       resultsContainer.style.display = 'flex';
+      // Trigger animated entrance
+      resultsContainer.classList.remove('animated-enter');
+      void resultsContainer.offsetWidth; // Force reflow
+      resultsContainer.classList.add('animated-enter');
       resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     // Header & Summary
     if (resIdEl) resIdEl.textContent = c.id;
     if (resStatusBadge) {
-      resStatusBadge.textContent = c.status;
+      resStatusBadge.innerHTML = `<span class="live-pulse-dot"></span> ${c.status}`;
       resStatusBadge.className = `status-badge-lg ${c.statusClass}`;
     }
     if (resCatEl) resCatEl.textContent = `${c.categoryIcon} ${c.category}`;
@@ -434,18 +451,19 @@ function initTrackFlow() {
     if (resLocEl) resLocEl.textContent = c.location;
     if (resDateEl) resDateEl.textContent = c.submittedDate;
     if (resPriorityEl) {
-      resPriorityEl.textContent = c.priority;
+      resPriorityEl.innerHTML = `<span class="live-pulse-dot"></span> ${c.priority}`;
       resPriorityEl.className = `summary-field-val ${c.priorityClass}`;
     }
     if (resSlaEl) resSlaEl.textContent = c.expectedSla;
     if (resStatusTextEl) resStatusTextEl.textContent = c.status;
 
-    // Timeline Rendering
+    // Timeline Rendering with staggered entrance
     if (timelineContainer) {
       timelineContainer.innerHTML = '';
       c.timeline.forEach((step, idx) => {
         const stepEl = document.createElement('div');
         stepEl.className = `timeline-step-item ${step.state}`;
+        stepEl.style.animationDelay = `${(idx + 1) * 0.06}s`;
 
         let dotIcon = '●';
         if (step.state === 'completed') dotIcon = '✓';
@@ -469,9 +487,9 @@ function initTrackFlow() {
     if (updateTimeEl) updateTimeEl.textContent = c.latestUpdate.time;
     if (updateOfficerEl) updateOfficerEl.textContent = `Official Note: ${c.latestUpdate.officer}`;
 
-    // SLA Telemetry
+    // SLA Telemetry with animated badge & shimmer progress
     if (slaBadgeEl) {
-      slaBadgeEl.textContent = c.slaStatus;
+      slaBadgeEl.innerHTML = `<span class="live-pulse-dot"></span> ${c.slaStatus}`;
       slaBadgeEl.className = `metric-pill ${c.slaColorClass === 'status-green' ? 'metric-priority-norm' : c.slaColorClass === 'status-amber' ? 'metric-priority-med' : 'metric-priority-high'}`;
     }
     if (slaProgressFill) {

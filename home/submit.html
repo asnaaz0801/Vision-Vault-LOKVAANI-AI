@@ -25,10 +25,18 @@
   <header class="navbar" id="main-navbar">
     <div class="container navbar-container">
       <a href="index.html" class="brand-link" aria-label="LokVaani AI Home">
-        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+        <div class="brand-logo-container">
+          <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+          <div class="brand-logo-halo"></div>
+        </div>
         <div class="brand-title-wrap">
-          <span class="brand-title">LokVaani <span>AI</span></span>
-          <span class="brand-subtitle">Civic Intelligence Platform</span>
+          <div class="brand-title-row">
+            <span class="brand-title">LokVaani<span class="brand-title-ai">AI<span class="ai-spark-beacon"></span></span></span>
+          </div>
+          <div class="brand-subtitle-row">
+            <span class="brand-subtitle">Civic Intelligence Platform</span>
+          </div>
+          <div class="brand-data-line"></div>
         </div>
       </a>
 
@@ -74,7 +82,7 @@
       </div>
 
       <!-- Page Header -->
-      <div class="submit-page-header">
+      <div class="submit-page-header page-enter-fade-up">
         <div class="section-label">CITIZEN GRIEVANCE INTAKE</div>
         <h1>Submit a Civic Issue</h1>
         <p>Report municipal concerns directly to the responsible local authority with automated triage and SLA tracking.</p>
@@ -518,7 +526,10 @@
     </div>
   </footer>
 
-  <!-- Submission Engine Script -->
+  <!-- Supabase & Environment Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/env-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
   <script src="js/submit.js"></script>
 </body>
 </html>

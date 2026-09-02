@@ -19,7 +19,38 @@ let adminState = {
   searchQuery: ''
 };
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Hydrate from Supabase if connected
+  if (typeof getEscalationsFromDb === 'function') {
+    try {
+      const escResult = await getEscalationsFromDb();
+      if (escResult.success && escResult.source === 'supabase' && escResult.data.length > 0) {
+        const supabaseIds = new Set(escResult.data.map(e => e.escalationId));
+        const mockOnly = INITIAL_ESCALATIONS.filter(e => !supabaseIds.has(e.escalationId));
+        adminState.escalations = [...escResult.data, ...mockOnly];
+        console.log(`🟢 Admin Portal: Loaded ${escResult.data.length} escalations from Supabase.`);
+      }
+    } catch (err) { console.warn('Admin escalations hydration fallback:', err); }
+
+    try {
+      const offResult = await getOfficersFromDb();
+      if (offResult.success && offResult.source === 'supabase' && offResult.data.length > 0) {
+        const supabaseIds = new Set(offResult.data.map(o => o.id));
+        const mockOnly = INITIAL_OFFICERS.filter(o => !supabaseIds.has(o.id));
+        adminState.officers = [...offResult.data, ...mockOnly];
+        console.log(`🟢 Admin Portal: Loaded ${offResult.data.length} officers from Supabase.`);
+      }
+    } catch (err) { console.warn('Admin officers hydration fallback:', err); }
+
+    try {
+      const logResult = await getAuditLogsFromDb();
+      if (logResult.success && logResult.source === 'supabase' && logResult.data.length > 0) {
+        adminState.auditLogs = logResult.data;
+        console.log(`🟢 Admin Portal: Loaded ${logResult.data.length} audit logs from Supabase.`);
+      }
+    } catch (err) { console.warn('Admin audit logs hydration fallback:', err); }
+  }
+
   initAdminNavigation();
   initNotificationDrawer();
   initProfileDropdown();

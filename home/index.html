@@ -30,10 +30,18 @@
   <header class="navbar" id="main-navbar">
     <div class="container navbar-container">
       <a href="#home" class="brand-link" aria-label="LokVaani AI Home">
-        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+        <div class="brand-logo-container">
+          <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+          <div class="brand-logo-halo"></div>
+        </div>
         <div class="brand-title-wrap">
-          <span class="brand-title">LokVaani <span>AI</span></span>
-          <span class="brand-subtitle">Civic Intelligence Platform</span>
+          <div class="brand-title-row">
+            <span class="brand-title">LokVaani<span class="brand-title-ai">AI<span class="ai-spark-beacon"></span></span></span>
+          </div>
+          <div class="brand-subtitle-row">
+            <span class="brand-subtitle">Civic Intelligence Platform</span>
+          </div>
+          <div class="brand-data-line"></div>
         </div>
       </a>
 
@@ -134,8 +142,9 @@
             </div>
           </div>
 
-          <!-- Right Column: Interactive Civic Intelligence Network -->
+          <!-- Right Column: Interactive Civic Intelligence Command Center -->
           <div class="hero-visual-card">
+            <!-- Header: Title Badge & Live Status -->
             <div class="visual-header">
               <div class="visual-title-badge">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -147,30 +156,57 @@
               </div>
               <div class="visual-live-indicator">
                 <span class="visual-live-dot"></span>
-                <span>Live Municipal Telemetry</span>
+                <span>LIVE AI INTELLIGENCE</span>
+              </div>
+            </div>
+
+            <!-- Live Animated Counters Bar -->
+            <div class="command-telemetry-bar">
+              <div class="command-stat-item">
+                <span class="stat-num-val" id="cmd-stat-analyzed">42,850+</span>
+                <span class="stat-lbl-val">Complaints Analyzed</span>
+              </div>
+              <div class="command-stat-divider"></div>
+              <div class="command-stat-item">
+                <span class="stat-num-val" id="cmd-stat-resolved">94.2%</span>
+                <span class="stat-lbl-val">Issues Resolved</span>
+              </div>
+              <div class="command-stat-divider"></div>
+              <div class="command-stat-item">
+                <span class="stat-num-val" style="color: #EF4444;" id="cmd-stat-alerts">12 Critical</span>
+                <span class="stat-lbl-val">Active Alerts</span>
               </div>
             </div>
 
             <!-- Canvas Visualization Container -->
             <div class="civic-network-container" id="network-visual-container">
               <!-- Smart City Grid Geometric Background -->
-              <svg class="city-wireframe-svg" viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="city-wireframe-svg" viewBox="0 0 500 380" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50 350 L250 250 L450 350" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2 4" />
                 <path d="M100 200 L250 280 L400 200" stroke="#CBD5E1" stroke-width="1" stroke-dasharray="2 4" />
-                <circle cx="250" cy="200" r="140" stroke="#E2E8F0" stroke-width="1" />
-                <circle cx="250" cy="200" r="80" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4 4" />
+                <circle cx="250" cy="190" r="140" stroke="#E2E8F0" stroke-width="1" />
+                <circle cx="250" cy="190" r="85" stroke="#E2E8F0" stroke-width="1" stroke-dasharray="4 4" />
               </svg>
 
-              <!-- Central AI Hub -->
-              <div class="ai-core-hub">
+              <!-- Central AI Hub (Enlarged, Prominent, Pulsing Concentric Rings) -->
+              <div class="ai-core-hub" id="ai-neural-hub-core" title="LokVaani AI Neural Hub — Real-Time Inference">
+                <div class="ai-core-ring-1"></div>
+                <div class="ai-core-ring-2"></div>
                 <div class="ai-core-pulse"></div>
-                <span class="ai-core-text">AI</span>
-                <span class="ai-core-sub">NEURAL HUB</span>
+                <div class="ai-core-content-wrap">
+                  <span class="ai-core-badge">AI CORE</span>
+                  <span class="ai-core-text">AI</span>
+                  <span class="ai-core-sub">NEURAL HUB</span>
+                  <span class="ai-core-status-pill">
+                    <span class="live-pulse-dot" style="background: #00D2EE; width: 5px; height: 5px; margin-right: 3px;"></span>
+                    <span id="ai-hub-status-label">ACTIVE</span>
+                  </span>
+                </div>
               </div>
 
-              <!-- Surrounding Civic Nodes -->
-              <!-- Water -->
-              <div class="civic-node node-water" data-domain="water" title="Water & Pipeline Issues">
+              <!-- Clickable Civic Nodes -->
+              <!-- Water (Default Active) -->
+              <div class="civic-node node-water active" data-node="water" title="Click to inspect Water grievances">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
                 </svg>
@@ -178,7 +214,7 @@
               </div>
 
               <!-- Roads -->
-              <div class="civic-node node-roads" data-domain="roads" title="Roads & Pothole Repair">
+              <div class="civic-node node-roads" data-node="roads" title="Click to inspect Road & Pothole issues">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="4" y="3" width="16" height="18" rx="2"></rect>
                   <line x1="12" y1="7" x2="12" y2="10"></line>
@@ -188,7 +224,7 @@
               </div>
 
               <!-- Waste -->
-              <div class="civic-node node-waste" data-domain="waste" title="Solid Waste Management">
+              <div class="civic-node node-waste" data-node="waste" title="Click to inspect Waste & Sanitation issues">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -197,7 +233,7 @@
               </div>
 
               <!-- Street Lights -->
-              <div class="civic-node node-lights" data-domain="lights" title="Street Lights & Electrical">
+              <div class="civic-node node-lights" data-node="lights" title="Click to inspect Electrical & Street Light issues">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path>
                 </svg>
@@ -205,7 +241,7 @@
               </div>
 
               <!-- Drainage -->
-              <div class="civic-node node-drainage" data-domain="drainage" title="Drainage & Stormwater">
+              <div class="civic-node node-drainage" data-node="drainage" title="Click to inspect Drainage & Sewage issues">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="12" cy="12" r="10"></circle>
                   <path d="M12 8v8M8 12h8"></path>
@@ -214,7 +250,7 @@
               </div>
 
               <!-- Location / GIS -->
-              <div class="civic-node node-location" data-domain="location" title="Geospatial Coordinates">
+              <div class="civic-node node-location" data-node="location" title="Click to inspect GIS Geospatial Cluster">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
@@ -222,43 +258,79 @@
                 <span class="civic-node-label">Location</span>
               </div>
 
-              <!-- Animated Stream Lines SVG -->
-              <svg class="network-svg-lines" viewBox="0 0 500 410">
-                <line x1="120" y1="64" x2="250" y2="205" class="stream-line-active" />
-                <line x1="380" y1="64" x2="250" y2="205" class="stream-line-active" />
-                <line x1="120" y1="346" x2="250" y2="205" class="stream-line-active" />
-                <line x1="380" y1="346" x2="250" y2="205" class="stream-line-active" />
-                <line x1="56" y1="205" x2="250" y2="205" class="stream-line-active" />
-                <line x1="444" y1="205" x2="250" y2="205" class="stream-line-active" />
+              <!-- Animated Stream Lines SVG with IDs -->
+              <svg class="network-svg-lines" viewBox="0 0 500 380">
+                <line id="line-water" x1="120" y1="56" x2="250" y2="190" class="stream-line-active stream-selected" />
+                <line id="line-roads" x1="380" y1="56" x2="250" y2="190" class="stream-line-active" />
+                <line id="line-drainage" x1="120" y1="324" x2="250" y2="190" class="stream-line-active" />
+                <line id="line-location" x1="435" y1="190" x2="250" y2="190" class="stream-line-active" />
+                <line id="line-lights" x1="65" y1="190" x2="250" y2="190" class="stream-line-active" />
+                <line id="line-waste" x1="380" y1="324" x2="250" y2="190" class="stream-line-active" />
               </svg>
             </div>
 
-            <!-- Workflow Pipeline Ribbon Below Visualization -->
-            <div class="visual-pipeline-strip">
-              <div class="pipeline-step active">
+            <!-- Dynamic Node Telemetry Card -->
+            <div class="node-telemetry-banner" id="node-telemetry-banner">
+              <div class="telemetry-banner-top">
+                <div class="telemetry-category-group">
+                  <span class="telemetry-cat-icon" id="tc-cat-icon">💧</span>
+                  <div>
+                    <span class="telemetry-cat-title" id="tc-cat-title">Water Supply & Pipeline Infra</span>
+                    <span class="telemetry-dept-name" id="tc-dept-name">Water Supply Department</span>
+                  </div>
+                </div>
+                <span class="telemetry-ai-status" id="tc-ai-status">🟢 NLP Triage Active (99.4%)</span>
+              </div>
+              <div class="telemetry-banner-metrics">
+                <div class="t-metric-box">
+                  <span class="t-metric-val" id="tc-active-count">142</span>
+                  <span class="t-metric-lbl">Active Complaints</span>
+                </div>
+                <div class="t-metric-box">
+                  <span class="t-metric-val text-high" id="tc-urgent-count">18</span>
+                  <span class="t-metric-lbl">High Priority Issues</span>
+                </div>
+                <div class="t-metric-box">
+                  <span class="t-metric-val" id="tc-sla-time">4 - 12h</span>
+                  <span class="t-metric-lbl">Target SLA</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Interactive Workflow Pipeline Strip -->
+            <div class="visual-pipeline-strip" id="command-pipeline-strip">
+              <button type="button" class="pipeline-step-btn active" data-step="1">
                 <span class="pipeline-step-badge">1</span>
                 <span>Citizen</span>
-              </div>
+              </button>
               <span class="pipeline-arrow">→</span>
-              <div class="pipeline-step active">
+              <button type="button" class="pipeline-step-btn" data-step="2">
                 <span class="pipeline-step-badge">2</span>
                 <span>AI Triage</span>
-              </div>
+              </button>
               <span class="pipeline-arrow">→</span>
-              <div class="pipeline-step active">
+              <button type="button" class="pipeline-step-btn" data-step="3">
                 <span class="pipeline-step-badge">3</span>
                 <span>Priority</span>
-              </div>
+              </button>
               <span class="pipeline-arrow">→</span>
-              <div class="pipeline-step active">
+              <button type="button" class="pipeline-step-btn" data-step="4">
                 <span class="pipeline-step-badge">4</span>
                 <span>Auto-Assign</span>
-              </div>
+              </button>
               <span class="pipeline-arrow">→</span>
-              <div class="pipeline-step success">
+              <button type="button" class="pipeline-step-btn" data-step="5">
                 <span class="pipeline-step-badge">✓</span>
                 <span>Resolution</span>
-              </div>
+              </button>
+            </div>
+
+            <!-- Pipeline Step Interactive Explanation Box -->
+            <div class="pipeline-explanation-box" id="pipeline-explanation-box">
+              <span class="exp-step-indicator" id="exp-step-indicator">STEP 1 OF 5 • INTAKE</span>
+              <p class="exp-step-text" id="pipeline-step-description">
+                <strong>Citizen Intake:</strong> Multi-channel reporting via text, voice notes (Bhashini dialect AI), geotagged photos, and WhatsApp helpline.
+              </p>
             </div>
           </div>
 
@@ -1342,6 +1414,10 @@
     </div>
   </div>
 
+  <!-- Supabase & Environment Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/js/env-config.js"></script>
+  <script src="../js/supabase-client.js"></script>
   <!-- JavaScript Engine -->
   <script src="js/home.js"></script>
 </body>

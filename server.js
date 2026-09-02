@@ -15,8 +15,35 @@ const MIME_TYPES = {
   '.ico': 'image/x-icon',
 };
 
+function loadEnv() {
+  const envPath = path.join(__dirname, '.env');
+  const envVars = {};
+  if (fs.existsSync(envPath)) {
+    const content = fs.readFileSync(envPath, 'utf8');
+    content.split(/\r?\n/).forEach(line => {
+      line = line.trim();
+      if (line && !line.startsWith('#') && line.includes('=')) {
+        const parts = line.split('=');
+        const key = parts[0].trim();
+        const val = parts.slice(1).join('=').trim().replace(/^["']|["']$/g, '');
+        envVars[key] = val;
+      }
+    });
+  }
+  return envVars;
+}
+
 const server = http.createServer((req, res) => {
   let reqUrl = req.url.split('?')[0];
+
+  // Dynamic endpoint to expose safe Supabase credentials from .env to browser
+  if (reqUrl === '/js/env-config.js') {
+    const envVars = loadEnv();
+    const configJs = `/* LokVaani AI Runtime Environment Config */\nwindow.SUPABASE_URL = "${envVars.SUPABASE_URL || ''}";\nwindow.SUPABASE_PUBLISHABLE_KEY = "${envVars.SUPABASE_PUBLISHABLE_KEY || ''}";\n`;
+    res.writeHead(200, { 'Content-Type': 'application/javascript; charset=utf-8' });
+    return res.end(configJs);
+  }
+
   let filePath = path.join(__dirname, reqUrl);
   
   // Security check
