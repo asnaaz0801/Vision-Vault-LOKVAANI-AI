@@ -19,6 +19,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- Leaflet GIS Map Stylesheet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="css/home.css">
 </head>
@@ -716,44 +719,11 @@
               </div>
             </div>
 
-            <!-- GIS Map Container -->
-            <div class="gis-map-canvas">
-              <svg class="map-svg-grid" viewBox="0 0 600 440" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <!-- Ward Outlines -->
-                <path d="M40 80 L180 40 L280 120 L160 220 Z" stroke="#1E3A5F" stroke-width="1.5" fill="rgba(30, 58, 95, 0.2)" />
-                <path d="M180 40 L420 30 L480 140 L280 120 Z" stroke="#1E3A5F" stroke-width="1.5" fill="rgba(30, 58, 95, 0.25)" />
-                <path d="M280 120 L480 140 L540 280 L340 320 L240 240 Z" stroke="#1E3A5F" stroke-width="1.5" fill="rgba(30, 58, 95, 0.3)" />
-                <path d="M160 220 L240 240 L340 320 L220 400 L60 340 Z" stroke="#1E3A5F" stroke-width="1.5" fill="rgba(30, 58, 95, 0.2)" />
-                <path d="M340 320 L540 280 L560 410 L380 420 Z" stroke="#1E3A5F" stroke-width="1.5" fill="rgba(30, 58, 95, 0.15)" />
-
-                <!-- City River & Arterial Roads -->
-                <path d="M0 260 Q 200 240 350 200 T 600 150" stroke="#00D2EE" stroke-width="2" stroke-opacity="0.4" fill="none" stroke-dasharray="4 4" />
-                <path d="M250 0 L250 440" stroke="#CBD5E1" stroke-width="1" stroke-opacity="0.1" />
-                <path d="M0 220 L600 220" stroke="#CBD5E1" stroke-width="1" stroke-opacity="0.1" />
-              </svg>
-
-              <!-- Hotspot 1: Water (Ward 12) -->
-              <div class="map-hotspot active" data-type="water" style="top: 170px; left: 190px;">
-                <div class="hotspot-beacon hotspot-red"></div>
-                <div class="hotspot-label">Ward 12 • Water</div>
-              </div>
-
-              <!-- Hotspot 2: Roads (Sector 4) -->
-              <div class="map-hotspot" data-type="roads" style="top: 85px; left: 360px;">
-                <div class="hotspot-beacon hotspot-orange"></div>
-                <div class="hotspot-label">Sector 4 • Roads</div>
-              </div>
-
-              <!-- Hotspot 3: Waste (Ward 18) -->
-              <div class="map-hotspot" data-type="waste" style="top: 310px; left: 420px;">
-                <div class="hotspot-beacon hotspot-green"></div>
-                <div class="hotspot-label">Ward 18 • Waste</div>
-              </div>
-
-              <!-- Hotspot 4: Lights (Ward 07) -->
-              <div class="map-hotspot" data-type="lights" style="top: 320px; left: 160px;">
-                <div class="hotspot-beacon hotspot-blue"></div>
-                <div class="hotspot-label">Ward 07 • Lights</div>
+            <!-- Interactive Leaflet City Heatmap Container -->
+            <div class="gis-map-canvas" style="padding: 0; overflow: hidden; position: relative;">
+              <div id="home-gis-leaflet-map" style="height: 440px; width: 100%; border-radius: 12px; z-index: 1;"></div>
+              <div style="position: absolute; bottom: 12px; left: 12px; z-index: 1000; background: rgba(15, 23, 42, 0.88); color: white; padding: 6px 12px; border-radius: 6px; font-size: 0.75rem; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.15);">
+                🔥 Real-time City Grievance Heatmap • Click any hotspot beacon to view live telemetry
               </div>
             </div>
           </div>
@@ -1418,6 +1388,9 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/js/env-config.js"></script>
   <script src="../js/supabase-client.js"></script>
+  <!-- Leaflet GIS Map & Heatmap Libraries -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
   <!-- JavaScript Engine -->
   <script src="js/home.js"></script>
 </body>

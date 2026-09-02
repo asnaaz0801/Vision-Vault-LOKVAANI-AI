@@ -518,78 +518,153 @@ function initDuplicateVisualizer() {
 /* ==========================================================================
    6. SMART CITY GIS MAP & HOTSPOTS
    ========================================================================== */
-function initCityMap() {
-  const hotspots = document.querySelectorAll('.map-hotspot');
-  const filterPills = document.querySelectorAll('.filter-pill');
+/* ==========================================================================
+   6. SMART CITY LEAFLET GIS HEATMAP & HOTSPOTS ENGINE
+   ========================================================================== */
+let homeGisMap = null;
+let homeGisHeatLayer = null;
+let homeGisMarkersGroup = null;
+let homeGisCurrentFilter = 'all';
 
+async function initCityMap() {
+  const mapContainer = document.getElementById('home-gis-leaflet-map');
+  if (!mapContainer || typeof L === 'undefined') return;
+
+  if (!homeGisMap) {
+    try {
+      homeGisMap = L.map('home-gis-leaflet-map', { zoomControl: true }).setView([18.5204, 73.8567], 13);
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(homeGisMap);
+
+      homeGisMarkersGroup = L.layerGroup().addTo(homeGisMap);
+    } catch (e) {
+      console.warn("Home GIS map init notice:", e);
+      return;
+    }
+  }
+
+  // Load complaints data from Supabase / localStorage / INITIAL_COMPLAINTS
+  let complaints = [];
+  if (typeof getComplaintsFromDb === 'function') {
+    try {
+      const res = await getComplaintsFromDb();
+      if (res.success && res.data && res.data.length > 0) {
+        complaints = res.data;
+      }
+    } catch (e) {}
+  }
+
+  if (complaints.length === 0 && typeof INITIAL_COMPLAINTS !== 'undefined') {
+    complaints = INITIAL_COMPLAINTS;
+  }
+
+  renderHomeGisHeatmapAndMarkers(complaints);
+  initHomeGisFilterPills(complaints);
+}
+
+function renderHomeGisHeatmapAndMarkers(complaints) {
+  if (!homeGisMap) return;
+
+  if (homeGisMarkersGroup) homeGisMarkersGroup.clearLayers();
+  if (homeGisHeatLayer) {
+    homeGisMap.removeLayer(homeGisHeatLayer);
+    homeGisHeatLayer = null;
+  }
+
+  // Filter complaints based on current filter pill
+  const filtered = complaints.filter(c => {
+    if (homeGisCurrentFilter === 'all') return true;
+    const cat = (c.category || '').toLowerCase();
+    if (homeGisCurrentFilter === 'water') return cat.includes('water');
+    if (homeGisCurrentFilter === 'roads') return cat.includes('road') || cat.includes('pothole');
+    if (homeGisCurrentFilter === 'waste') return cat.includes('waste') || cat.includes('sanitation') || cat.includes('garbage');
+    if (homeGisCurrentFilter === 'lights') return cat.includes('light') || cat.includes('electric');
+    return true;
+  });
+
+  // Generate Heatmap points [lat, lng, intensity]
+  const heatPoints = filtered.map((c, i) => {
+    const lat = parseFloat(c.latitude) || (18.5204 + (i * 0.005 - 0.012));
+    const lng = parseFloat(c.longitude) || (73.8567 + (i * 0.006 - 0.014));
+    const intensity = Math.min(1.0, Math.max(0.35, (c.priorityScore || 80) / 100));
+    return [lat, lng, intensity];
+  });
+
+  if (typeof L.heatLayer === 'function' && heatPoints.length > 0) {
+    homeGisHeatLayer = L.heatLayer(heatPoints, {
+      radius: 32,
+      blur: 22,
+      maxZoom: 15,
+      gradient: { 0.3: '#3B82F6', 0.6: '#F59E0B', 1.0: '#DC2626' }
+    }).addTo(homeGisMap);
+  }
+
+  // Render Hotspot Beacons / Markers
+  filtered.forEach((c, i) => {
+    const lat = parseFloat(c.latitude) || (18.5204 + (i * 0.005 - 0.012));
+    const lng = parseFloat(c.longitude) || (73.8567 + (i * 0.006 - 0.014));
+
+    const cat = (c.category || '').toLowerCase();
+    let color = '#3B82F6';
+    let iconEmoji = '⚡';
+
+    if (cat.includes('water')) { color = '#DC2626'; iconEmoji = '💧'; }
+    else if (cat.includes('road') || cat.includes('pothole')) { color = '#F59E0B'; iconEmoji = '🚧'; }
+    else if (cat.includes('waste') || cat.includes('sanitation') || cat.includes('garbage')) { color = '#10B981'; iconEmoji = '🗑️'; }
+    else if (cat.includes('light') || cat.includes('electric')) { color = '#3B82F6'; iconEmoji = '⚡'; }
+
+    const beaconHtml = `<div style="background: ${color}; width: 32px; height: 32px; border-radius: 50%; border: 3px solid white; box-shadow: 0 4px 16px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; font-size: 14px; color: white;">${iconEmoji}</div>`;
+
+    const marker = L.marker([lat, lng], {
+      icon: L.divIcon({ className: 'home-hotspot-pin', html: beaconHtml, iconSize: [32, 32], iconAnchor: [16, 16] })
+    });
+
+    // Clicking beacon updates the right-side Insight Drawer!
+    marker.on('click', () => {
+      updateInsightDrawerForComplaint(c);
+    });
+
+    const popupContent = `
+      <div style="font-family: system-ui, sans-serif; padding: 4px; min-width: 180px;">
+        <strong style="font-size: 0.875rem; color: #0F172A;">${c.complaintId || 'Grievance Cluster'}</strong><br>
+        <span style="font-size: 0.78125rem; font-weight: 700; color: ${color};">${c.category || 'Municipal Grievance'}</span><br>
+        <span style="font-size: 0.75rem; color: #475569;">📍 ${c.location || 'Ward 12'}</span><br>
+        <div style="margin-top: 6px; font-size: 0.71875rem; background: #F1F5F9; padding: 4px 6px; border-radius: 4px;">
+          Priority: <strong>${c.priorityScore || 80}/100</strong> (${c.priorityLevel || 'High'})
+        </div>
+      </div>
+    `;
+
+    marker.bindPopup(popupContent);
+    homeGisMarkersGroup.addLayer(marker);
+  });
+}
+
+function updateInsightDrawerForComplaint(c) {
   const insightWard = document.getElementById('insight-ward-title');
   const insightTotal = document.getElementById('insight-total-reports');
   const insightUnresolved = document.getElementById('insight-unresolved-count');
   const insightPriority = document.getElementById('insight-priority-val');
   const insightPrediction = document.getElementById('insight-prediction-text');
 
-  const wardData = {
-    water: {
-      ward: 'Ward 12 — Drainage & Water Main',
-      total: '84 Reports',
-      unresolved: '3 Unresolved',
-      priority: 'HIGH (94)',
-      prediction: 'Recurring issue risk may increase during heavy rainfall. Pipeline pressure exceeds threshold at Station Road junction.'
-    },
-    roads: {
-      ward: 'Sector 4 — Main Arterial Ring Road',
-      total: '46 Reports',
-      unresolved: '5 Unresolved',
-      priority: 'HIGH (81)',
-      prediction: 'Asphalt degradation detected across 240m stretch. Heavy vehicle corridor requires immediate milling and patching.'
-    },
-    waste: {
-      ward: 'Ward 18 — Wholesale Market Yard',
-      total: '62 Reports',
-      unresolved: '2 Unresolved',
-      priority: 'MEDIUM (68)',
-      prediction: 'Commercial waste generation surges between 4 PM - 7 PM. Recommended deploying auxiliary compactor truck.'
-    },
-    lights: {
-      ward: 'Ward 07 — ABC Chowk Junction',
-      total: '50 Reports',
-      unresolved: '1 Unresolved',
-      priority: 'HIGH (88)',
-      prediction: 'Phase line tripping identified on feeder pole 14. 3 adjacent intersections affected; safety hazard at night.'
-    }
-  };
+  if (insightWard) insightWard.textContent = `${c.location || 'Ward 12'} — ${c.category || 'Grievance Cluster'}`;
+  if (insightTotal) insightTotal.textContent = `${Math.floor(40 + Math.random() * 50)} Reports`;
+  if (insightUnresolved) insightUnresolved.textContent = `Active (${c.status || 'Assigned'})`;
+  if (insightPriority) insightPriority.textContent = `${(c.priorityLevel || 'HIGH').toUpperCase()} (${c.priorityScore || 85})`;
+  if (insightPrediction) insightPrediction.textContent = `"${c.aiSummary || c.description || 'Predictive triage model flags bottleneck; dispatch scheduled.'}"`;
+}
 
-  hotspots.forEach(spot => {
-    spot.addEventListener('click', () => {
-      const type = spot.getAttribute('data-type');
-      hotspots.forEach(s => s.classList.remove('active'));
-      spot.classList.add('active');
-
-      const data = wardData[type];
-      if (data) {
-        if (insightWard) insightWard.textContent = data.ward;
-        if (insightTotal) insightTotal.textContent = data.total;
-        if (insightUnresolved) insightUnresolved.textContent = data.unresolved;
-        if (insightPriority) insightPriority.textContent = data.priority;
-        if (insightPrediction) insightPrediction.textContent = `"${data.prediction}"`;
-      }
-    });
-  });
-
+function initHomeGisFilterPills(complaints) {
+  const filterPills = document.querySelectorAll('.filter-pills .filter-pill');
   filterPills.forEach(pill => {
     pill.addEventListener('click', () => {
       filterPills.forEach(p => p.classList.remove('active'));
       pill.classList.add('active');
 
-      const filter = pill.getAttribute('data-filter');
-      hotspots.forEach(spot => {
-        const spotType = spot.getAttribute('data-type');
-        if (filter === 'all' || filter === spotType) {
-          spot.style.display = 'block';
-        } else {
-          spot.style.display = 'none';
-        }
-      });
+      homeGisCurrentFilter = pill.getAttribute('data-filter') || 'all';
+      renderHomeGisHeatmapAndMarkers(complaints);
     });
   });
 }
