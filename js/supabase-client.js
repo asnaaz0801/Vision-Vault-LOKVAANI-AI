@@ -220,6 +220,24 @@ async function createComplaintInDb(complaint) {
  * UPDATE COMPLAINT STATUS / OFFICER (OFFICER & ADMIN ACTIONS)
  */
 async function updateComplaintInDb(refCode, updates) {
+  // Always update localStorage immediately for instant cross-portal status sync
+  try {
+    const localList = JSON.parse(localStorage.getItem('lokvaani_submitted_complaints') || '[]');
+    const target = localList.find(c => c.complaintId === refCode || c.referenceCode === refCode || c.id === refCode);
+    if (target) {
+      if (updates.status) target.status = updates.status;
+      if (updates.slaState) target.slaState = updates.slaState;
+      if (updates.resolutionNote) target.resolutionNote = updates.resolutionNote;
+      if (updates.resolutionProof) target.resolutionProof = updates.resolutionProof;
+      if (updates.assignedOfficer) target.assignedOfficer = updates.assignedOfficer;
+      target.updatedAt = 'Just now (Status Updated)';
+      localStorage.setItem('lokvaani_submitted_complaints', JSON.stringify(localList));
+      console.log('🟢 Updated complaint status in localStorage:', refCode, updates);
+    }
+  } catch (e) {
+    console.warn("localStorage update error:", e);
+  }
+
   if (isSupabaseConnected()) {
     try {
       const dbUpdates = {};

@@ -321,36 +321,149 @@ function initTrackFlow() {
     });
   }
 
-  // 4. Perform Search Function
-  function performSearch(query) {
+  // 4. Perform Search Function (Queries Live Supabase DB + localStorage)
+  async function performSearch(query) {
     const submitTrackBtn = document.getElementById('btn-track-submit');
     if (submitTrackBtn) {
       submitTrackBtn.classList.add('is-loading');
-      submitTrackBtn.innerHTML = '<span class="btn-spinner"></span> <span>Tracking...</span>';
+      submitTrackBtn.innerHTML = '<span class="btn-spinner"></span> <span>Tracking Live Telemetry...</span>';
     }
 
-    setTimeout(() => {
-      let complaint = null;
-      const cleanQuery = query.toUpperCase();
+    const cleanQuery = query.trim().toUpperCase();
 
-      // Check direct match
-      if (complaintsDb[cleanQuery]) {
-        complaint = complaintsDb[cleanQuery];
-      } else if (currentSearchMode === 'phone' || query.length === 10) {
-        // Mobile search simulation: maps to LOK-2026-7853
-        complaint = complaintsDb['LOK-2026-7853'];
-      } else {
-        // Dynamic fallback generator for any custom ID entered by user!
-        complaint = generateDynamicRecord(cleanQuery);
+    // 1. Fetch live complaints list from Supabase DB + localStorage
+    let liveComplaints = [];
+    if (typeof getComplaintsFromDb === 'function') {
+      try {
+        const res = await getComplaintsFromDb();
+        if (res && res.success && res.data) {
+          liveComplaints = res.data;
+        }
+      } catch (err) {}
+    }
+
+    // Also check localStorage directly
+    try {
+      const local = JSON.parse(localStorage.getItem('lokvaani_submitted_complaints') || '[]');
+      liveComplaints = [...liveComplaints, ...local];
+    } catch (e) {}
+
+    // Find complaint by complaintId, referenceCode, id, or contact
+    let rawComplaint = liveComplaints.find(c => {
+      const cId = (c.complaintId || c.referenceCode || c.id || '').toUpperCase();
+      const contact = (c.citizenContact || '').toUpperCase();
+      if (cleanQuery && cId === cleanQuery) return true;
+      if (currentSearchMode === 'phone' || query.length === 10) {
+        return contact.includes(query);
       }
+      return false;
+    });
 
-      if (submitTrackBtn) {
-        submitTrackBtn.classList.remove('is-loading');
-        submitTrackBtn.innerHTML = '<span>Track Request</span> <span class="btn-icon">&rarr;</span>';
+    let complaint = null;
+
+    if (rawComplaint) {
+      console.log("🟢 Citizen Track: Found live complaint record:", rawComplaint);
+      complaint = normalizeComplaintForTracking(rawComplaint);
+    } else if (complaintsDb[cleanQuery]) {
+      complaint = complaintsDb[cleanQuery];
+    } else {
+      complaint = generateDynamicRecord(cleanQuery);
+    }
+
+    if (submitTrackBtn) {
+      submitTrackBtn.classList.remove('is-loading');
+      submitTrackBtn.innerHTML = '<span>Track Request</span> <span class="btn-icon">&rarr;</span>';
+    }
+
+    renderComplaint(complaint);
+  }
+
+  function normalizeComplaintForTracking(raw) {
+    const id = raw.complaintId || raw.referenceCode || raw.id || 'LV-2026-1000';
+    const status = raw.status || 'Assigned';
+    
+    // Status class mapping
+    let statusClass = 'status-badge-in-progress';
+    if (status === 'Resolved' || status === 'Resolved by Officer' || status === 'Resolved by Administrator') {
+      statusClass = 'status-badge-resolved';
+    } else if (status === 'Escalated' || status === 'SLA Breached' || raw.slaState === 'SLA BREACHED') {
+      statusClass = 'status-badge-at-risk';
+    } else if (status === 'Assigned') {
+      statusClass = 'status-badge-assigned';
+    }
+
+    // Live timeline construction
+    const isInProgress = status === 'In Progress' || status === 'Resolved' || status.includes('Resolved');
+    const isResolved = status === 'Resolved' || status.includes('Resolved');
+
+    const timeline = [
+      {
+        title: 'Complaint Submitted',
+        time: raw.createdAt || 'Today',
+        desc: 'Grievance registered with location coordinates and priority telemetry.',
+        state: 'completed'
+      },
+      {
+        title: 'AI Analysis & Priority Surged',
+        time: raw.createdAt || 'Today',
+        desc: `Priority score ${raw.priorityScore || 82}/100 (${raw.priorityLevel || 'High'}). Automated routing complete.`,
+        state: 'completed'
+      },
+      {
+        title: 'Department & Officer Assigned',
+        time: raw.createdAt || 'Today',
+        desc: `Assigned to ${raw.assignedOfficer || 'Er. Rajesh Kumar'} (${raw.department || 'Water Supply Department'}).`,
+        state: 'completed'
+      },
+      {
+        title: 'In Progress / Field Dispatch',
+        time: isInProgress ? (raw.updatedAt || 'Recently') : 'Pending Crew Dispatch',
+        desc: isInProgress ? (raw.resolutionNote || 'Field crew actively working on-site for resolution.') : 'Queued in officer work console.',
+        state: isInProgress ? (isResolved ? 'completed' : 'current') : 'upcoming'
+      },
+      {
+        title: 'Resolved & Case Closed',
+        time: isResolved ? (raw.updatedAt || 'Completed') : 'Pending Inspection',
+        desc: isResolved ? (raw.resolutionNote || 'Issue rectified and verified by municipal authority.') : 'Post-repair verification and citizen sign-off.',
+        state: isResolved ? 'completed' : 'upcoming'
       }
+    ];
 
-      renderComplaint(complaint);
-    }, 280);
+    const catName = raw.category ? raw.category.split('—')[0].trim() : 'Municipal Grievance';
+    const subcatName = raw.category ? (raw.category.split('—')[1] || raw.category).trim() : 'Civic Issue';
+
+    return {
+      id: id,
+      category: catName,
+      categoryIcon: catName.toLowerCase().includes('water') ? '💧' :
+                    catName.toLowerCase().includes('road') || catName.toLowerCase().includes('pothole') ? '🚧' :
+                    catName.toLowerCase().includes('waste') || catName.toLowerCase().includes('sanitation') ? '🗑️' : '🏛️',
+      subcategory: subcatName,
+      department: raw.department || 'Water Supply Department',
+      location: raw.location || 'Ward 12',
+      submittedDate: raw.createdAt || 'Today',
+      priority: `${raw.priorityLevel || 'High'} (${raw.priorityScore || 82}/100)`,
+      priorityClass: (raw.priorityLevel === 'Critical' || raw.priorityScore > 88) ? 'metric-priority-high' : 'metric-priority-med',
+      expectedSla: `${raw.slaHours || 24} Hours SLA Target`,
+      status: status,
+      statusClass: statusClass,
+      slaStatus: raw.slaState || 'On Track',
+      slaProgressPercent: isResolved ? 100 : (status === 'In Progress' ? 65 : 30),
+      slaColorClass: raw.slaState === 'SLA BREACHED' ? 'status-red' : 'status-green',
+      slaTimeRemaining: raw.slaState === 'SLA BREACHED' ? '🚨 SLA Breached - Escalated to Administrator' : `Target SLA: ${raw.slaHours || 24}h (${raw.slaState || 'ON TRACK'})`,
+      latestUpdate: {
+        text: raw.resolutionNote || raw.aiSummary || `Complaint status is currently "${status}". Assigned to ${raw.assignedOfficer || 'Er. Rajesh Kumar'}.`,
+        time: raw.updatedAt || 'Today',
+        officer: raw.assignedOfficer || 'Er. Rajesh Kumar (Municipal Field Officer)'
+      },
+      timeline: timeline,
+      details: {
+        citizenDesc: raw.description || 'Grievance submitted by citizen.',
+        peopleAffected: 'Ward / Street Level',
+        evidence: raw.resolutionProof ? `Proof Attached: ${raw.resolutionProof}` : 'EXIF & GPS Geotagged',
+        coordinates: raw.gisCoordinates || `${raw.latitude || 18.5204}° N, ${raw.longitude || 73.8567}° E`
+      }
+    };
   }
 
   // Fallback dynamic generator
