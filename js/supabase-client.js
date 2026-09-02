@@ -86,8 +86,26 @@ async function getComplaintsFromDb() {
     localSubmitted = JSON.parse(localStorage.getItem('lokvaani_submitted_complaints') || '[]');
   } catch (e) {}
 
-  // Baseline mock complaints
-  const mockBaseline = typeof INITIAL_COMPLAINTS !== 'undefined' ? INITIAL_COMPLAINTS : [];
+  // Baseline mock complaints with parsed lat/lng coordinates
+  const rawBaseline = typeof INITIAL_COMPLAINTS !== 'undefined' ? INITIAL_COMPLAINTS : [];
+  const mockBaseline = rawBaseline.map((c, i) => {
+    let lat = c.latitude;
+    let lng = c.longitude;
+
+    if (!lat || !lng) {
+      if (c.gisCoordinates && c.gisCoordinates.includes(',')) {
+        const parts = c.gisCoordinates.split(',');
+        lat = parseFloat(parts[0].replace(/[^\d.]/g, ''));
+        lng = parseFloat(parts[1].replace(/[^\d.]/g, ''));
+      }
+    }
+
+    return {
+      ...c,
+      latitude: typeof lat === 'number' && !isNaN(lat) ? lat : (18.5204 + (i * 0.004 - 0.010)),
+      longitude: typeof lng === 'number' && !isNaN(lng) ? lng : (73.8567 + (i * 0.005 - 0.012))
+    };
+  });
 
   // Merge order: Local Submitted (newest) -> Supabase DB -> Mock Baseline (deduplicated by complaintId)
   const combined = [];

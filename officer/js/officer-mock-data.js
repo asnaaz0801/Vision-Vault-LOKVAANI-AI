@@ -311,3 +311,12 @@ function calculateOfficerStats(complaintsList) {
   };
   return stats;
 }
+
+if (typeof window !== 'undefined') {
+  window.INITIAL_COMPLAINTS = INITIAL_COMPLAINTS;
+  window.INITIAL_OFFICER_PROFILE = INITIAL_OFFICER_PROFILE;
+}
+if (typeof global !== 'undefined') {
+  global.INITIAL_COMPLAINTS = INITIAL_COMPLAINTS;
+  global.INITIAL_OFFICER_PROFILE = INITIAL_OFFICER_PROFILE;
+}

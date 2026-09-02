@@ -1116,30 +1116,37 @@ function renderCityComplaintsView() {
   const container = document.getElementById('city-complaints-tbody');
   if (!container) return;
 
-  let list = adminState.escalations;
+  let list = (adminState.complaints && adminState.complaints.length > 0) ? adminState.complaints : adminState.escalations;
+
   if (adminState.searchQuery) {
     const q = adminState.searchQuery;
     list = list.filter(c => 
-      c.complaintId.toLowerCase().includes(q) ||
-      c.category.toLowerCase().includes(q) ||
-      c.department.toLowerCase().includes(q) ||
-      c.officer.toLowerCase().includes(q) ||
-      c.location.toLowerCase().includes(q)
+      (c.complaintId && c.complaintId.toLowerCase().includes(q)) ||
+      (c.category && c.category.toLowerCase().includes(q)) ||
+      (c.department && c.department.toLowerCase().includes(q)) ||
+      (c.assignedOfficer && c.assignedOfficer.toLowerCase().includes(q)) ||
+      (c.officer && c.officer.toLowerCase().includes(q)) ||
+      (c.location && c.location.toLowerCase().includes(q))
     );
   }
 
-  container.innerHTML = list.map(c => `
+  container.innerHTML = list.map(c => {
+    const isCritical = c.slaState === 'SLA BREACHED' || c.priorityLevel === 'Critical' || c.severity === 'Critical';
+    const badgeClass = isCritical ? 'st-red' : (c.priorityLevel === 'High' ? 'st-orange' : 'st-blue');
+
+    return `
     <tr>
       <td style="font-family: monospace; font-weight: 800; color: var(--royal-blue);">${c.complaintId}</td>
-      <td><strong style="color: var(--navy-900); font-size: 0.90625rem;">${c.category}</strong></td>
-      <td><span style="font-weight: 700; color: var(--navy-900);">${c.department}</span></td>
-      <td>${c.officer}</td>
-      <td>${c.location}</td>
-      <td><span class="status-dot-pill st-red">▲ Score ${c.priorityScore}</span></td>
-      <td><span style="color: #DC2626; font-weight: 800;">${c.breachDuration}</span></td>
-      <td><span class="status-dot-pill ${c.status === 'Pending Action' ? 'st-escalated' : 'st-resolved'}">● ${c.status}</span></td>
+      <td><strong style="color: var(--navy-900); font-size: 0.90625rem;">${c.category || 'Municipal Grievance'}</strong></td>
+      <td><span style="font-weight: 700; color: var(--navy-900);">${c.department || 'Public Works'}</span></td>
+      <td>${c.assignedOfficer || c.officer || 'Er. Rajesh Kumar'}</td>
+      <td>${c.location || 'Ward 12'}</td>
+      <td><span class="status-dot-pill ${badgeClass}">▲ Score ${c.priorityScore || 80}</span></td>
+      <td><span style="color: ${isCritical ? '#DC2626' : 'var(--text-primary)'}; font-weight: 800;">${c.slaState || 'ON TRACK'}</span></td>
+      <td><span class="status-dot-pill ${c.status === 'Resolved' ? 'st-resolved' : 'st-escalated'}">● ${c.status || 'Assigned'}</span></td>
     </tr>
-  `).join('');
+  `;
+  }).join('');
 }
 
 function renderCityIntelligenceView() {
