@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit a Civic Issue — LokVaani AI</title>
+  <meta name="description" content="Submit civic grievances in your city. Select category, subcategory, assess impact, and track with guaranteed SLA turnaround.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/lokvaani-logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       STICKY NAVBAR
+       ======================================================================== -->
+  <header class="navbar" id="main-navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-link" aria-label="LokVaani AI Home">
+        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+        <div class="brand-title-wrap">
+          <span class="brand-title">LokVaani <span>AI</span></span>
+          <span class="brand-subtitle">Civic Intelligence Platform</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="index.html#why-different" class="nav-link">Why LokVaani</a></li>
+          <li><a href="submit.html" class="nav-link active">Submit Issue</a></li>
+          <li><a href="index.html#help" class="nav-link">Help</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="track.html" class="btn btn-secondary" style="padding: 8px 18px; font-size: 0.875rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Track Request</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Toggle Menu" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="submit-page-wrap">
+    <div class="container">
+      
+      <!-- Breadcrumbs -->
+      <div class="submit-breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span>Citizen Portal</span>
+        <span>/</span>
+        <span style="color: var(--navy-900); font-weight: 600;">Submit Issue</span>
+      </div>
+
+      <!-- Page Header -->
+      <div class="submit-page-header">
+        <div class="section-label">CITIZEN GRIEVANCE INTAKE</div>
+        <h1>Submit a Civic Issue</h1>
+        <p>Report municipal concerns directly to the responsible local authority with automated triage and SLA tracking.</p>
+      </div>
+
+      <!-- Main Submission Form Flow (Full-Width Linear Flow) -->
+      <div class="submit-form-container" id="citizen-submit-form">
+
+        <!-- STEP 1: SELECT ISSUE CATEGORY -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">1</span>
+            <div class="form-section-title">
+              <h3>Select Issue Category</h3>
+              <span>Choose the primary civic domain for your grievance</span>
+            </div>
+          </div>
+
+          <div class="category-cards-grid">
+            <!-- Water -->
+            <div class="category-card selected" data-cat="water">
+              <div class="category-card-icon" style="color: #0284C7;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+              <div class="category-card-title">Water</div>
+              <div class="category-card-desc">Supply, leaks, pressure, pipes</div>
+            </div>
+
+            <!-- Roads -->
+            <div class="category-card" data-cat="roads">
+              <div class="category-card-icon" style="color: #D97706;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+                  <line x1="12" y1="7" x2="12" y2="10"></line>
+                  <line x1="12" y1="14" x2="12" y2="17"></line>
+                </svg>
+              </div>
+              <div class="category-card-title">Roads</div>
+              <div class="category-card-desc">Potholes, cracks, pavement</div>
+            </div>
+
+            <!-- Electricity -->
+            <div class="category-card" data-cat="electricity">
+              <div class="category-card-icon" style="color: #EAB308;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+              </div>
+              <div class="category-card-title">Electricity</div>
+              <div class="category-card-desc">Street lights, poles, wires</div>
+            </div>
+
+            <!-- Waste -->
+            <div class="category-card" data-cat="waste">
+              <div class="category-card-icon" style="color: #16A34A;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"></polyline>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+              </div>
+              <div class="category-card-title">Waste</div>
+              <div class="category-card-desc">Garbage overflow, dumping</div>
+            </div>
+
+            <!-- Drainage -->
+            <div class="category-card" data-cat="drainage">
+              <div class="category-card-icon" style="color: #6366F1;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M12 8v8M8 12h8"></path>
+                </svg>
+              </div>
+              <div class="category-card-title">Drainage</div>
+              <div class="category-card-desc">Choked sewers, manholes</div>
+            </div>
+
+            <!-- Parks -->
+            <div class="category-card" data-cat="parks">
+              <div class="category-card-icon" style="color: #059669;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 19V5M5 12l7-7 7 7"></path>
+                </svg>
+              </div>
+              <div class="category-card-title">Parks</div>
+              <div class="category-card-desc">Gardens, benches, trees</div>
+            </div>
+
+            <!-- Other -->
+            <div class="category-card" data-cat="other">
+              <div class="category-card-icon" style="color: #64748B;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="16" x2="12" y2="12"></line>
+                  <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+              </div>
+              <div class="category-card-title">Other</div>
+              <div class="category-card-desc">Animals, noise, general civic</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2: ISSUE UNDER DEPARTMENT -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">2</span>
+            <div class="form-section-title">
+              <h3>Issue Under Department</h3>
+              <span>Automatically determined based on municipal governance jurisdictions</span>
+            </div>
+          </div>
+
+          <div class="dept-routing-banner">
+            <div class="dept-tag-group">
+              <span class="dept-label-title">Assigned Municipal Authority:</span>
+              <span class="dept-name-val" id="selected-dept-name">Water Supply Department</span>
+            </div>
+
+            <div class="dept-metrics-row">
+              <span class="metric-pill metric-priority-high" id="selected-priority-pill">Priority: High (Urgent)</span>
+              <span class="metric-pill metric-sla" id="selected-sla-pill">Expected SLA: 4 - 12 Hours</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: DYNAMIC SUBCATEGORY SELECTION -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">3</span>
+            <div class="form-section-title">
+              <h3>Dynamic Subcategory Selection</h3>
+              <span>Select the exact issue type to ensure accurate technical triage</span>
+            </div>
+          </div>
+
+          <div class="subcat-chips-grid" id="subcat-chips-container">
+            <!-- Dynamically populated chips -->
+          </div>
+        </div>
+
+        <!-- STEP 4: ESTIMATED IMPACT -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">4</span>
+            <div class="form-section-title">
+              <h3>Estimated Impact</h3>
+              <span>Helps AI calibrate urgency, prioritize resources, and trigger early escalations</span>
+            </div>
+          </div>
+
+          <div class="impact-selection-grid">
+            <!-- People Affected -->
+            <div class="impact-field-group">
+              <span class="impact-field-label">People Affected:</span>
+              <div class="impact-options-col">
+                <button type="button" class="impact-btn-pill impact-people-pill" data-val="Individual (1-5 people)">
+                  🏠 Individual (1-5 people)
+                </button>
+                <button type="button" class="impact-btn-pill impact-people-pill selected" data-val="Building / Street (10-50 people)">
+                  🏘️ Building / Street (10-50 people)
+                </button>
+                <button type="button" class="impact-btn-pill impact-people-pill" data-val="Locality (50-200 people)">
+                  🏢 Locality (50-200 people)
+                </button>
+                <button type="button" class="impact-btn-pill impact-people-pill" data-val="Entire Ward (200+ people)">
+                  🏙️ Entire Ward (200+ people)
+                </button>
+              </div>
+            </div>
+
+            <!-- Duration of Issue -->
+            <div class="impact-field-group">
+              <span class="impact-field-label">Duration of Issue:</span>
+              <div class="impact-options-col">
+                <button type="button" class="impact-btn-pill impact-duration-pill" data-val="Today (< 6 hours)">
+                  ⏱️ Today (&lt; 6 hours)
+                </button>
+                <button type="button" class="impact-btn-pill impact-duration-pill selected" data-val="1 - 2 Days">
+                  📅 1 - 2 Days
+                </button>
+                <button type="button" class="impact-btn-pill impact-duration-pill" data-val="3 - 7 Days">
+                  🗓️ 3 - 7 Days
+                </button>
+                <button type="button" class="impact-btn-pill impact-duration-pill" data-val="Over a Week">
+                  ⏳ Over a Week
+                </button>
+              </div>
+            </div>
+
+            <!-- Impact Level -->
+            <div class="impact-field-group">
+              <span class="impact-field-label">Impact Severity Level:</span>
+              <div class="impact-options-col">
+                <button type="button" class="impact-btn-pill impact-level-pill" data-level="low">
+                  🟢 Low (Minor Inconvenience)
+                </button>
+                <button type="button" class="impact-btn-pill impact-level-pill" data-level="medium">
+                  🟡 Medium (Impacting Routine)
+                </button>
+                <button type="button" class="impact-btn-pill impact-level-pill selected" data-level="high">
+                  🟠 High (Safety or Health Hazard)
+                </button>
+                <button type="button" class="impact-btn-pill impact-level-pill" data-level="critical">
+                  🔴 Critical (Public Emergency)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 5: DESCRIBE YOUR ISSUE -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">5</span>
+            <div class="form-section-title">
+              <h3>Describe Your Issue</h3>
+              <span>Provide written details, upload photo proof, or record a voice note</span>
+            </div>
+          </div>
+
+          <!-- Quick Presets -->
+          <div style="margin-bottom: 12px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+            <span style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted);">Quick Presets:</span>
+            <button type="button" class="preset-chip preset-btn-chip" data-text="Main water pipeline ruptured near Station Road junction, causing rapid water gushing and road flooding.">💧 Ruptured Water Main</button>
+            <button type="button" class="preset-chip preset-btn-chip" data-text="Deep pothole cluster on ring road near bus stop; vehicles losing balance.">🚧 Hazardous Pothole</button>
+            <button type="button" class="preset-chip preset-btn-chip" data-text="Street light inoperative for multiple nights; dark intersection creating severe accident risk.">💡 Dark Street Light</button>
+            <button type="button" class="preset-chip preset-btn-chip" data-text="Garbage overflow outside market area spreading on road with foul smell.">🗑️ Overflowing Waste</button>
+          </div>
+
+          <div class="desc-textarea-wrap">
+            <textarea class="desc-textarea" id="issue-description" placeholder="Describe the civic issue with details like landmarks, severity, or how long it has been occurring..."></textarea>
+            <div class="desc-counter-bar">
+              <span>Vernacular text or dialect code-mixed phrases supported (Hindi, Marathi, English)</span>
+              <span id="char-count" style="font-weight: 700; color: var(--navy-900);">0 / 500 characters</span>
+            </div>
+          </div>
+
+          <div class="evidence-grid">
+            <!-- Upload Photo -->
+            <input type="file" id="photo-input" accept="image/*" style="display: none;">
+            <div class="evidence-box" id="photo-dropzone">
+              <div class="evidence-box-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                  <polyline points="21 15 16 10 5 21"></polyline>
+                </svg>
+              </div>
+              <div class="evidence-box-title">Upload Photo</div>
+              <div class="evidence-box-sub" id="photo-status-text">
+                Click or drag photo here<br>
+                <span style="font-size: 11px;">JPG, PNG up to 10MB</span>
+              </div>
+            </div>
+
+            <!-- Record Voice Note -->
+            <div class="evidence-box" id="voice-record-box">
+              <div class="evidence-box-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                  <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+              </div>
+              <div class="evidence-box-title">Record Voice Note</div>
+              <div class="evidence-box-sub" id="voice-status-text">
+                Click to record spoken grievance<br>
+                <span style="font-size: 11px;">Powered by Bhashini AI</span>
+              </div>
+              <span id="voice-timer-display" style="display: none; font-family: monospace; font-weight: 700; color: #DC2626; margin-top: 6px;">0:00s</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 6: ISSUE LOCATION -->
+        <div class="form-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">6</span>
+            <div class="form-section-title">
+              <h3>Issue Location</h3>
+              <span>Pin the exact location for field crew navigation and geo-auditing</span>
+            </div>
+          </div>
+
+          <div class="location-row">
+            <input type="text" class="location-input-field" id="issue-address" placeholder="Enter landmark, road name, or ward number..." value="Station Road near Metro Pillar 42, Ward 12">
+            <button type="button" class="btn-gps-loc" id="btn-use-gps">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+              </svg>
+              <span>Use Current Location</span>
+            </button>
+          </div>
+
+          <!-- Mini GIS Map Preview -->
+          <div class="mini-map-preview">
+            <svg class="mini-map-svg" viewBox="0 0 600 160" fill="none">
+              <path d="M20 30 L160 20 L280 70 L140 140 Z" stroke="#3B82F6" stroke-width="1.5" fill="rgba(59, 130, 246, 0.15)" />
+              <path d="M280 70 L460 40 L560 120 L380 150 Z" stroke="#3B82F6" stroke-width="1.5" fill="rgba(59, 130, 246, 0.2)" />
+              <path d="M0 90 Q 300 80 600 70" stroke="#00D2EE" stroke-width="2" stroke-dasharray="4 4" />
+            </svg>
+            <div class="mini-map-pin">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+              <span class="mini-map-pin-tag" id="map-pin-label">Ward 12 • High-Accuracy Pin</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 7: FULL-WIDTH AI COMPLAINT PREVIEW (Immediately before Submit button) -->
+        <div class="ai-preview-section-card">
+          <div class="ai-preview-header">
+            <span class="ai-preview-badge">
+              <span>⚡</span>
+              <span>AI Complaint Preview</span>
+            </span>
+            <span style="font-size: 0.75rem; color: #4ADE80; font-weight: 600; display: flex; align-items: center; gap: 6px;">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #4ADE80; display: inline-block;"></span>
+              Live Telemetry Calibrated
+            </span>
+          </div>
+
+          <div class="preview-telemetry-grid">
+            <div class="preview-telemetry-item">
+              <span class="preview-telemetry-key">Category</span>
+              <div class="preview-telemetry-val" id="prev-category">💧 Water</div>
+            </div>
+            <div class="preview-telemetry-item">
+              <span class="preview-telemetry-key">Subcategory</span>
+              <div class="preview-telemetry-val" id="prev-subcategory">Broken Pipeline</div>
+            </div>
+            <div class="preview-telemetry-item">
+              <span class="preview-telemetry-key">Issue Under Department</span>
+              <div class="preview-telemetry-val" id="prev-dept">Water Supply Department</div>
+            </div>
+            <div class="preview-telemetry-item">
+              <span class="preview-telemetry-key">Calculated Priority</span>
+              <div class="preview-telemetry-val" style="color: #F87171;" id="prev-priority">High (84/100)</div>
+            </div>
+            <div class="preview-telemetry-item">
+              <span class="preview-telemetry-key">Expected SLA</span>
+              <div class="preview-telemetry-val" style="color: #60A5FA;" id="prev-sla">8 - 18 Hours</div>
+            </div>
+          </div>
+
+          <!-- AI Generated Summary -->
+          <div class="ai-summary-box">
+            <div class="ai-summary-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                <polyline points="2 17 12 22 22 17"></polyline>
+              </svg>
+              <span>AI-Generated Complaint Summary</span>
+            </div>
+            <div class="ai-summary-text" id="prev-summary">
+              "Water incident: Broken Pipeline reported at Station Road near Metro Pillar 42, Ward 12. Severity matrix evaluated impact as High (Building / Street, duration: 1 - 2 Days). Issue placed under Water Supply Department with expected 8 - 18 Hours SLA turnaround."
+            </div>
+          </div>
+
+          <!-- FINAL CTA: SUBMIT COMPLAINT BUTTON -->
+          <div class="submit-action-wrap">
+            <button class="btn btn-primary btn-submit-main" id="btn-submit-complaint">
+              <span>Submit Complaint</span>
+              <span class="btn-icon">&rarr;</span>
+            </button>
+            <div style="font-size: 0.75rem; color: var(--text-inverse-muted); margin-top: 12px;">
+              🛡️ Geotagged and timestamped. Verified under municipal citizen charter.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- SUCCESS STATE VIEW -->
+      <div class="submit-success-view" id="submit-success-view">
+        <div class="success-check-bubble">✓</div>
+        <h2 style="font-size: 1.875rem; color: var(--navy-900); margin-bottom: 8px;">Complaint Submitted Successfully</h2>
+        <p style="font-size: 1rem; color: var(--text-secondary); max-width: 520px; margin: 0 auto;">
+          Your issue has been logged and dispatched to the municipal maintenance division. You will receive real-time SMS & WhatsApp updates.
+        </p>
+
+        <div class="success-ticket-box">
+          <div class="success-ticket-header">
+            <div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700;">Complaint Reference ID</div>
+              <div class="success-ticket-id" id="success-complaint-id">LOK-2026-8941</div>
+            </div>
+            <span style="background: var(--civic-green-light); color: var(--civic-green-dark); font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 9999px;">
+              DISPATCHED
+            </span>
+          </div>
+
+          <div class="success-meta-grid">
+            <div>
+              <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Department</span>
+              <strong id="success-department">Water Supply Department</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Calculated Priority</span>
+              <strong style="color: #DC2626;" id="success-priority">High (84/100)</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Resolution SLA</span>
+              <strong style="color: var(--royal-blue);" id="success-sla">8 - 18 Hours</strong>
+            </div>
+            <div>
+              <span style="color: var(--text-muted); font-size: 0.75rem; display: block;">Verification Status</span>
+              <strong style="color: var(--civic-green-dark);">EXIF & Location Verified</strong>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+          <a href="track.html" id="btn-success-track" class="btn btn-primary" style="padding: 12px 28px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>Track Request</span>
+          </a>
+          <button class="btn btn-secondary" onclick="window.location.reload();" style="padding: 12px 24px;">
+            Submit Another Issue
+          </button>
+          <a href="index.html" class="btn btn-secondary" style="padding: 12px 24px;">
+            Back to Home
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" style="padding: 48px 0 24px;">
+    <div class="container" style="text-align: center; font-size: 0.8125rem; color: var(--text-inverse-muted);">
+      <div>© 2026 LokVaani AI. Citizen Grievance Redressal & Governance Intelligence Platform.</div>
+    </div>
+  </footer>
+
+  <!-- Submission Engine Script -->
+  <script src="js/submit.js"></script>
+</body>
+</html>

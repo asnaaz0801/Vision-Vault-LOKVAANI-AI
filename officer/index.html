@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LokVaani AI — Government Officer Operations Console</title>
+  <meta name="description" content="AI-Powered Civic Grievance Triage, SLA Monitoring, and Municipal Resolution Operations Console for Government Officers.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/lokvaani-logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Link Shared Design Tokens & Stylesheet -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Dedicated Isolated Officer Portal Stylesheet -->
+  <link rel="stylesheet" href="css/officer.css">
+</head>
+<body>
+
+  <div class="officer-app">
+    <!-- ========================================================================
+         LEFT NAVIGATION SIDEBAR
+         ======================================================================== -->
+    <aside class="officer-sidebar" aria-label="Officer Console Navigation">
+      <div class="sidebar-header">
+        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="sidebar-logo">
+        <div>
+          <div class="sidebar-brand-title">LokVaani <span>AI</span></div>
+          <span class="sidebar-brand-sub">Officer Operations</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-category">Main Workspace</div>
+        <ul class="sidebar-menu">
+          <li>
+            <button class="sidebar-link active" data-view="dashboard">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Dashboard</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" data-view="complaints">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+              </svg>
+              <span>Complaints</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" data-view="priority-queue">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Priority Queue</span>
+              <span class="sidebar-badge-count">3</span>
+            </button>
+          </li>
+          <li>
+            <button class="sidebar-link" data-view="analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <span>Analytics</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="nav-category" style="margin-top: 24px;">Account</div>
+        <ul class="sidebar-menu">
+          <li>
+            <button class="sidebar-link" data-view="profile">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+              <span>Profile</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Sidebar Bottom Officer Identity Profile -->
+      <div class="sidebar-profile">
+        <div class="profile-avatar">RK</div>
+        <div class="profile-info">
+          <div class="profile-name">Rajesh Kumar</div>
+          <div class="profile-title">Junior Civic Officer</div>
+          <div class="profile-dept-tag">Water Department</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================================================
+         MAIN CONTENT & WORKSPACE
+         ======================================================================== -->
+    <main class="officer-main">
+      <!-- Topbar Bar Header -->
+      <header class="officer-topbar">
+        <div class="topbar-left">
+          <button class="mobile-nav-toggle" aria-label="Toggle Navigation">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+          <div class="topbar-search-wrap">
+            <svg class="topbar-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="complaint-search-input" placeholder="Search complaints by ID, ward, or keyword...">
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.8125rem;" onclick="triggerDemoComplaintIntake()">
+            ⚡ Ingest Demo Complaint
+          </button>
+          <div class="topbar-status-badge">
+            <span class="status-pulse-dot"></span>
+            <span>Live Auto-Sync Active</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="officer-content-body">
+        
+        <!-- ====================================================================
+             VIEW 1: DASHBOARD
+             ==================================================================== -->
+        <section class="officer-view-section active" id="view-dashboard">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">Good morning, Rajesh 👋</h1>
+              <p class="view-subtitle">Here's what needs your attention today in Zone 4 Water Supply Division.</p>
+            </div>
+            <div style="font-size: 0.8125rem; font-weight: 600; color: var(--text-muted); background: var(--bg-surface); padding: 8px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle);">
+              📅 September 02, 2026 • Municipal Shift A
+            </div>
+          </div>
+
+          <!-- KPI Cards Grid -->
+          <div class="kpi-grid">
+            <!-- 1. Assigned Complaints -->
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Assigned Complaints</span>
+                <div class="kpi-icon-wrap kpi-icon-blue">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-val-assigned">24</div>
+              <div class="kpi-subtext">
+                <span>● Across 5 Jurisdiction Wards</span>
+              </div>
+            </div>
+
+            <!-- 2. Critical Complaints -->
+            <div class="kpi-card" style="border-left: 4px solid #DC2626;">
+              <div class="kpi-card-header">
+                <span class="kpi-title" style="color: #DC2626;">Critical Priority</span>
+                <div class="kpi-icon-wrap kpi-icon-red">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" style="color: #DC2626;" id="kpi-val-critical">3</div>
+              <div class="kpi-subtext" style="color: #DC2626;">
+                <span>▲ Requires Immediate Field Action</span>
+              </div>
+            </div>
+
+            <!-- 3. Pending Complaints -->
+            <div class="kpi-card">
+              <div class="kpi-card-header">
+                <span class="kpi-title">Pending Crew Triage</span>
+                <div class="kpi-icon-wrap kpi-icon-amber">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" id="kpi-val-pending">8</div>
+              <div class="kpi-subtext">
+                <span>⏳ Queued for Crew Dispatch</span>
+              </div>
+            </div>
+
+            <!-- 4. SLA Breached -->
+            <div class="kpi-card kpi-card-breached">
+              <div class="kpi-card-header">
+                <span class="kpi-title" style="color: #DC2626;">SLA Breached</span>
+                <div class="kpi-icon-wrap kpi-icon-red">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                </div>
+              </div>
+              <div class="kpi-value" style="color: #DC2626;" id="kpi-val-breached">1</div>
+              <div class="kpi-subtext" style="color: #DC2626;">
+                <span>🚨 Escalated to Senior Executive</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Priority Queue Panel -->
+          <div class="section-panel">
+            <div class="panel-title-bar">
+              <div class="panel-title-group">
+                <div class="panel-title-icon">⚡</div>
+                <div>
+                  <h3 class="panel-heading">AI Priority Queue</h3>
+                  <p class="view-subtitle" style="font-size: 0.8125rem;">Dynamically sorted by LokVaani Severity Score & Public Impact Factor</p>
+                </div>
+              </div>
+              <button class="btn btn-secondary" style="padding: 8px 14px; font-size: 0.8125rem;" onclick="appState.currentView='priority-queue'; renderCurrentView();">
+                View Full Queue →
+              </button>
+            </div>
+
+            <!-- Priority Cards List -->
+            <div class="priority-queue-list" id="dashboard-priority-queue">
+              <!-- Dynamically Populated by JavaScript -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 2: COMPLAINTS DATA TABLE VIEW
+             ==================================================================== -->
+        <section class="officer-view-section" id="view-complaints">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">Assigned Grievance Complaints</h1>
+              <p class="view-subtitle">Filter, search, and manage field resolution workflows across municipal wards.</p>
+            </div>
+          </div>
+
+          <!-- Filter & Search Controls Bar -->
+          <div class="table-controls-bar">
+            <div class="filter-group-wrap">
+              <select class="filter-select" id="filter-category">
+                <option value="all">All Categories</option>
+                <option value="Water Supply Outage">Water Supply Outage</option>
+                <option value="Pipeline Leakage">Pipeline Leakage</option>
+                <option value="Low Water Pressure">Low Water Pressure</option>
+                <option value="Water Contamination">Water Contamination</option>
+              </select>
+
+              <select class="filter-select" id="filter-priority">
+                <option value="all">All Priorities</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+
+              <select class="filter-select" id="filter-status">
+                <option value="all">All Statuses</option>
+                <option value="assigned">Assigned</option>
+                <option value="in progress">In Progress</option>
+                <option value="pending">Pending</option>
+                <option value="resolved">Resolved</option>
+                <option value="escalated">Escalated</option>
+              </select>
+
+              <select class="filter-select" id="filter-sla">
+                <option value="all">All SLA States</option>
+                <option value="ON TRACK">On Track</option>
+                <option value="AT RISK">At Risk</option>
+                <option value="SLA BREACHED">SLA Breached</option>
+              </select>
+            </div>
+
+            <div style="font-size: 0.8125rem; font-weight: 600; color: var(--text-muted);">
+              Sorted by: <strong style="color: var(--navy-900);">Priority Level & Severity Score</strong>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="complaints-table-wrap">
+            <table class="complaints-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Issue & Summary</th>
+                  <th>Category</th>
+                  <th>Location</th>
+                  <th>Priority Score</th>
+                  <th>SLA Countdown</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="complaints-tbody">
+                <!-- Dynamically Populated -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 3: DEDICATED FULL-SCREEN PRIORITY QUEUE
+             ==================================================================== -->
+        <section class="officer-view-section" id="view-priority-queue">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">AI Priority Triage Console</h1>
+              <p class="view-subtitle">The officer immediately knows what needs attention first based on severity and public safety risk.</p>
+            </div>
+          </div>
+
+          <!-- Critical Tier -->
+          <div class="section-panel" style="border-left: 5px solid #DC2626; background: linear-gradient(180deg, #FFF5F5 0%, #FFFFFF 100%);">
+            <div class="panel-title-bar">
+              <div class="panel-title-group">
+                <span class="priority-score-badge badge-critical" style="font-size: 0.9375rem; padding: 8px 16px;">
+                  🚨 CRITICAL PRIORITY QUEUE (SLA &lt; 4 HOURS)
+                </span>
+              </div>
+            </div>
+            <div class="priority-queue-list" id="prio-col-critical"></div>
+          </div>
+
+          <!-- High Tier -->
+          <div class="section-panel" style="border-left: 5px solid var(--saffron);">
+            <div class="panel-title-bar">
+              <div class="panel-title-group">
+                <span class="priority-score-badge badge-high" style="font-size: 0.9375rem; padding: 8px 16px;">
+                  🟠 HIGH PRIORITY QUEUE
+                </span>
+              </div>
+            </div>
+            <div class="priority-queue-list" id="prio-col-high"></div>
+          </div>
+
+          <!-- Medium & Low Tiers -->
+          <div class="analytics-grid">
+            <div class="section-panel" style="border-left: 5px solid var(--royal-blue);">
+              <h4 class="card-title-head" style="color: var(--royal-blue);">🔵 Medium Priority</h4>
+              <div class="priority-queue-list" id="prio-col-medium"></div>
+            </div>
+            <div class="section-panel" style="border-left: 5px solid var(--text-muted);">
+              <h4 class="card-title-head" style="color: var(--text-muted);">⚪ Low Priority</h4>
+              <div class="priority-queue-list" id="prio-col-low"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 4: OFFICER ANALYTICS
+             ==================================================================== -->
+        <section class="officer-view-section" id="view-analytics">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">Department Analytics & SLA Compliance</h1>
+              <p class="view-subtitle">Real-time performance telemetry for Zone 4 Water Supply Division.</p>
+            </div>
+          </div>
+
+          <!-- Analytics KPI Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <span class="kpi-title">Complaints Resolved</span>
+              <div class="kpi-value" style="color: var(--civic-green-dark);">42</div>
+              <div class="kpi-subtext">This Month • +18% vs Last Month</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Avg Resolution Time</span>
+              <div class="kpi-value" style="color: var(--royal-blue);">11.4 hrs</div>
+              <div class="kpi-subtext">Target: &lt; 24.0 hrs</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">SLA Compliance Rate</span>
+              <div class="kpi-value" style="color: var(--civic-green-dark);">94%</div>
+              <div class="kpi-subtext">Municipal Benchmark: 90%</div>
+            </div>
+            <div class="kpi-card">
+              <span class="kpi-title">Citizen Feedback Rating</span>
+              <div class="kpi-value" style="color: var(--saffron-dark);">4.6 / 5</div>
+              <div class="kpi-subtext">Based on 140 Verified Ratings</div>
+            </div>
+          </div>
+
+          <!-- Charts Grid -->
+          <div class="analytics-grid">
+            <!-- Category Distribution Bar Chart -->
+            <div class="chart-card">
+              <h3 class="panel-heading" style="margin-bottom: 20px;">Grievance Category Breakdown</h3>
+              <div id="analytics-category-bars">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- SLA Compliance Distribution -->
+            <div class="chart-card">
+              <h3 class="panel-heading" style="margin-bottom: 20px;">SLA Performance Breakdown</h3>
+              <div style="display: flex; flex-direction: column; gap: 16px;">
+                <div class="progress-bar-item">
+                  <div class="bar-label-wrap">
+                    <span>Resolved On-Time (&lt; Target SLA)</span>
+                    <span style="color: var(--civic-green-dark);">94% (42 Tickets)</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill fill-green" style="width: 94%;"></div>
+                  </div>
+                </div>
+                <div class="progress-bar-item">
+                  <div class="bar-label-wrap">
+                    <span>At Risk of Breach (&lt; 1 Hour Remaining)</span>
+                    <span style="color: var(--saffron-dark);">4% (2 Tickets)</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill fill-amber" style="width: 4%;"></div>
+                  </div>
+                </div>
+                <div class="progress-bar-item">
+                  <div class="bar-label-wrap">
+                    <span>SLA Breached & Escalated</span>
+                    <span style="color: #DC2626;">2% (1 Ticket)</span>
+                  </div>
+                  <div class="bar-track">
+                    <div class="bar-fill" style="width: 2%; background: #DC2626;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 5: OFFICER PROFILE
+             ==================================================================== -->
+        <section class="officer-view-section" id="view-profile">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">Officer Credentials & Profile</h1>
+              <p class="view-subtitle">Verified Municipal Service Account details and jurisdiction boundaries.</p>
+            </div>
+          </div>
+
+          <div class="profile-card-full">
+            <div class="profile-card-header">
+              <div class="avatar-large">RK</div>
+              <div>
+                <h2 id="prof-name" style="font-family: var(--font-heading); font-size: 1.5rem; font-weight: 800; color: var(--navy-900);">Rajesh Kumar</h2>
+                <div id="prof-role" style="font-size: 0.9375rem; color: var(--royal-blue); font-weight: 700;">Junior Civic Officer</div>
+                <div style="margin-top: 6px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; background: #DCFCE7; color: #15803D; padding: 4px 10px; border-radius: 9999px; font-weight: 700;">
+                  <span>✓ SSO Verified via MeriPehchan / DigiLocker</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-field-row">
+              <span class="field-lbl">Officer ID:</span>
+              <span class="field-val" id="prof-id">OFF-WTR-047</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Department:</span>
+              <span class="field-val" id="prof-dept">Water Supply Department</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Zone & Wards:</span>
+              <span class="field-val" id="prof-zone">Zone 4 (Wards 8, 10, 12, 14, Sector 12)</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Official Email:</span>
+              <span class="field-val" id="prof-email">rajesh.kumar@lokvaani.gov.in</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Account Status:</span>
+              <span class="field-val" style="color: var(--civic-green-dark);">Active • Authorized Field Resolver</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 1: COMPLAINT DETAILS OPERATIONAL CONSOLE
+       ======================================================================== -->
+  <div class="modal-backdrop" id="complaint-detail-modal" role="dialog" aria-modal="true">
+    <div class="modal-window-lg">
+      <!-- Modal Header -->
+      <div class="modal-header-bar">
+        <div class="modal-title-wrap">
+          <span class="modal-complaint-id" id="modal-id-text">LV-10482</span>
+          <span class="status-pill st-assigned" id="modal-status-pill">Assigned</span>
+          <span class="priority-score-badge badge-critical" id="modal-prio-badge">▲ Critical (94/100)</span>
+        </div>
+        <button class="modal-close-btn modal-close-trigger" aria-label="Close Console">&times;</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body-scroll">
+        <div class="detail-layout-grid">
+          
+          <!-- LEFT COLUMN: Citizen Report + AI Analysis + Related Cluster -->
+          <div>
+            <!-- Citizen Report Card -->
+            <div class="detail-card-panel">
+              <h4 class="card-title-head">
+                <span>👤</span>
+                <span>Citizen Report & Payload</span>
+              </h4>
+              <div class="citizen-report-box" id="modal-report-text">
+                "No water supply in Sector 12 for the last two days. Elderly residents are facing serious problems."
+              </div>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary); display: flex; flex-direction: column; gap: 6px;">
+                <div><strong>Submitted By:</strong> <span id="modal-citizen-name">Sunita Verma</span> (<span id="modal-citizen-contact">+91 98112 34567</span>)</div>
+                <div><strong>Location:</strong> <span id="modal-location-text">Sector 12 (Ward 12)</span></div>
+                <div><strong>Submitted At:</strong> <span id="modal-submitted-time">Today, 08:42 AM</span></div>
+              </div>
+            </div>
+
+            <!-- AI Analysis Card -->
+            <div class="detail-card-panel" style="border-left: 4px solid var(--ai-cyan-dark);">
+              <h4 class="card-title-head" style="color: var(--ai-cyan-dark);">
+                <span>⚡</span>
+                <span>LokVaani AI Analysis</span>
+              </h4>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.84375rem; margin-bottom: 12px;">
+                <div><span style="color: var(--text-muted);">Category:</span> <strong id="modal-ai-cat">Water Supply Outage</strong></div>
+                <div><span style="color: var(--text-muted);">Department:</span> <strong id="modal-ai-dept">Water Department</strong></div>
+                <div><span style="color: var(--text-muted);">Severity:</span> <strong style="color: #DC2626;" id="modal-ai-sev">Critical</strong></div>
+                <div><span style="color: var(--text-muted);">Sentiment:</span> <strong id="modal-ai-sent">Highly Frustrated</strong></div>
+              </div>
+              <div style="background: var(--bg-surface-alt); padding: 12px; border-radius: 6px; font-size: 0.84375rem; font-style: italic;" id="modal-ai-summary">
+                "Extended major drinking water outage affecting multiple residential blocks and vulnerable institutions."
+              </div>
+            </div>
+
+            <!-- AI Priority Explainability -->
+            <div class="detail-card-panel">
+              <h4 class="card-title-head">
+                <span>🧠</span>
+                <span>AI Priority Reasoning</span>
+              </h4>
+              <p style="font-size: 0.78125rem; color: var(--text-muted); margin-bottom: 8px;">
+                Mathematical breakdown explaining why the AI assigned this priority score:
+              </p>
+              <ul class="reasoning-list" id="modal-ai-reasons-list">
+                <!-- Dynamically populated -->
+              </ul>
+              <div class="reasoning-total-bar">
+                <span>CALCULATED PRIORITY SCORE</span>
+                <span class="reasoning-total-val" id="modal-ai-total-score">94 / 100</span>
+              </div>
+            </div>
+
+            <!-- Duplicate / Related Complaints Cluster Card -->
+            <div class="duplicate-cluster-card" id="modal-duplicate-cluster">
+              <h4 class="card-title-head" style="color: var(--ai-cyan-dark); margin-bottom: 4px;">
+                <span>🔗</span>
+                <span>AI Detected Related Complaints</span>
+              </h4>
+              <p style="font-size: 0.8125rem; color: var(--text-secondary);" id="cluster-count-text">
+                7 similar complaints detected within 500m radius.
+              </p>
+
+              <div class="cluster-visual-strip">
+                <span style="font-size: 0.78125rem; font-weight: 700; color: var(--navy-900);">Vector Convergence:</span>
+                <span style="font-size: 0.78125rem; font-weight: 800; color: var(--royal-blue);">7 Citizen Reports → 1 Underlying Civic Work Order</span>
+              </div>
+
+              <div id="cluster-list-preview">
+                <!-- List of linked IDs -->
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COLUMN: SLA Monitoring + Timeline -->
+          <div>
+            <!-- SLA Monitoring Card -->
+            <div class="detail-card-panel" style="border-top: 4px solid var(--royal-blue);">
+              <h4 class="card-title-head">
+                <span>⏱️</span>
+                <span>SLA Clock & Target</span>
+              </h4>
+              <div style="margin-bottom: 12px;">
+                <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">Remaining SLA Time</div>
+                <div class="sla-time-str sla-ontrack" style="font-size: 1.75rem;" id="modal-sla-countdown">02h 17m 00s</div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.8125rem; background: var(--bg-surface-alt); padding: 10px; border-radius: 6px;">
+                <div><span style="color: var(--text-muted);">Guaranteed SLA:</span> <strong id="modal-sla-target">4 Hours</strong></div>
+                <div><span style="color: var(--text-muted);">Current State:</span> <span class="status-pill st-assigned" id="modal-sla-state-badge">ON TRACK</span></div>
+              </div>
+            </div>
+
+            <!-- Activity Timeline Card -->
+            <div class="detail-card-panel">
+              <h4 class="card-title-head">
+                <span>📜</span>
+                <span>Complaint Audit Trail</span>
+              </h4>
+              <ul class="timeline-list" id="modal-activity-timeline">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Action Buttons Bar -->
+      <div class="modal-footer-actions" id="modal-action-buttons">
+        <!-- Dynamically rendered based on complaint status -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: RESOLUTION WORKFLOW PANEL
+       ======================================================================== -->
+  <div class="modal-backdrop" id="resolution-modal" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header" style="background: var(--navy-900); color: white; padding: 18px 24px; border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
+        <h3>Resolve Complaint #<span id="res-complaint-id-text">LV-10482</span></h3>
+        <button class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <form id="resolution-form" class="modal-body" style="padding: 24px;">
+        <p style="font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 16px;">
+          Record on-site field maintenance proof and close ticket loop.
+        </p>
+
+        <div class="form-group">
+          <label class="form-label" for="res-action-taken">Action Taken Category:</label>
+          <select class="filter-select" id="res-action-taken" style="width: 100%;">
+            <option value="Water main valve repaired and water supply restored">Water main valve repaired & supply restored</option>
+            <option value="Pipeline leakage patched with ductile clamp">Pipeline leakage patched with clamp</option>
+            <option value="Booster pump pressure adjusted">Booster pump pressure adjusted</option>
+            <option value="Contamination line flushed and tested clean">Contamination line flushed & tested clean</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="res-note-input">Field Engineer Resolution Note:</label>
+          <textarea class="form-textarea" id="res-note-input" rows="3" placeholder="Describe the technical fix executed..."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Upload Proof of Work (Geotagged Photo):</label>
+          <div style="border: 1.5px dashed var(--border-medium); padding: 14px; text-align: center; border-radius: 8px; background: var(--bg-surface-alt); font-size: 0.8125rem; color: var(--text-muted);">
+            📷 Repaired_Pipe_Valve_Geotag.jpg (Attached)
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn" style="background: var(--civic-green); color: white;">
+            Submit Resolution
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 3: ESCALATION WORKFLOW PANEL
+       ======================================================================== -->
+  <div class="modal-backdrop" id="escalation-modal" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header" style="background: #7F1D1D; color: white; padding: 18px 24px; border-radius: var(--radius-xl) var(--radius-xl) 0 0;">
+        <h3>Escalate Complaint #<span id="esc-complaint-id-text">LV-10482</span> 🚨</h3>
+        <button class="modal-close-btn" style="color: white;">&times;</button>
+      </div>
+      <form id="escalation-form" class="modal-body" style="padding: 24px;">
+        <div style="background: #FEF2F2; border-left: 4px solid #DC2626; padding: 12px; border-radius: 6px; margin-bottom: 16px; font-size: 0.84375rem; color: #991B1B;">
+          <strong>SLA Alert:</strong> High severity grievance requiring senior executive intervention.
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="esc-target-officer">Escalate To:</label>
+          <select class="filter-select" id="esc-target-officer" style="width: 100%;">
+            <option value="Senior Water Executive Engineer (Zone 4)">Senior Water Executive Engineer (Zone 4)</option>
+            <option value="Chief Municipal Officer (CMO)">Chief Municipal Officer (CMO)</option>
+            <option value="District Urban Governance Desk">District Urban Governance Desk</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="esc-reason-input">Reason for Escalation:</label>
+          <textarea class="form-textarea" id="esc-reason-input" rows="3" placeholder="Explain bottleneck or resource shortage requiring senior intervention...">Resolution requires specialized heavy excavation machinery beyond junior division scope.</textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn" style="background: #DC2626; color: white;">
+            Confirm Escalation
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/officer-mock-data.js"></script>
+  <script src="js/officer.js"></script>
+</body>
+</html>

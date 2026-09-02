@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Your Request — LokVaani AI</title>
+  <meta name="description" content="Track your civic grievance in real time. View AI triage details, officer assignments, vertical status timeline, and guaranteed SLA countdown.">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/lokvaani-logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Main Stylesheet -->
+  <link rel="stylesheet" href="css/home.css">
+</head>
+<body>
+
+  <!-- ========================================================================
+       STICKY NAVBAR
+       ======================================================================== -->
+  <header class="navbar" id="main-navbar">
+    <div class="container navbar-container">
+      <a href="index.html" class="brand-link" aria-label="LokVaani AI Home">
+        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="brand-logo-img">
+        <div class="brand-title-wrap">
+          <span class="brand-title">LokVaani <span>AI</span></span>
+          <span class="brand-subtitle">Civic Intelligence Platform</span>
+        </div>
+      </a>
+
+      <nav aria-label="Primary Navigation">
+        <ul class="nav-menu">
+          <li><a href="index.html#home" class="nav-link">Home</a></li>
+          <li><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+          <li><a href="index.html#why-different" class="nav-link">Why LokVaani</a></li>
+          <li><a href="submit.html" class="nav-link">Submit Issue</a></li>
+          <li><a href="index.html#help" class="nav-link">Help</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="track.html" class="btn btn-secondary" style="background: var(--royal-blue-light); border-color: var(--royal-blue); color: var(--royal-blue); padding: 8px 18px; font-size: 0.875rem;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Track Request</span>
+        </a>
+        <a href="submit.html" class="btn btn-primary" style="padding: 8px 18px; font-size: 0.875rem;">
+          <span>Submit Issue</span>
+          <span class="btn-icon">&rarr;</span>
+        </a>
+        <button class="mobile-toggle" aria-label="Toggle Menu" aria-expanded="false">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="track-page-wrap">
+    <div class="container">
+      
+      <!-- Breadcrumbs -->
+      <div class="submit-breadcrumbs">
+        <a href="index.html">Home</a>
+        <span>/</span>
+        <span>Citizen Portal</span>
+        <span>/</span>
+        <span style="color: var(--navy-900); font-weight: 600;">Track Request</span>
+      </div>
+
+      <!-- 1. HERO / SEARCH SECTION -->
+      <div class="track-hero-section">
+        <div class="section-label">LIVE CITIZEN GRIEVANCE TELEMETRY</div>
+        <h1>Track Your Request</h1>
+        <p>Enter your Complaint ID to check the latest status.</p>
+
+        <div class="track-search-card">
+          <!-- Dual Search Toggle -->
+          <div class="track-tab-toggle">
+            <button type="button" class="track-tab-btn active" id="tab-search-id">Complaint ID</button>
+            <button type="button" class="track-tab-btn" id="tab-search-phone">Track using Mobile Number</button>
+          </div>
+
+          <form id="track-request-form" class="track-input-form-row">
+            <div class="track-input-wrap">
+              <svg class="track-input-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input type="text" id="track-id-input" class="track-main-input" placeholder="Enter Complaint ID (e.g., LOK-2026-7853)" value="LOK-2026-7853" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-track-submit" id="btn-track-submit">
+              <span>Track Request</span>
+              <span class="btn-icon">&rarr;</span>
+            </button>
+          </form>
+
+          <!-- Sample ID Chips for quick demo -->
+          <div class="sample-ids-wrap">
+            <span>Quick Samples:</span>
+            <button type="button" class="sample-id-chip" data-id="LOK-2026-7853">💧 LOK-2026-7853 (In Progress)</button>
+            <button type="button" class="sample-id-chip" data-id="LOK-2026-8941">🚧 LOK-2026-8941 (Resolved)</button>
+            <button type="button" class="sample-id-chip" data-id="LOK-2026-4109">⚡ LOK-2026-4109 (At Risk)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS SECTION CONTAINER -->
+      <div class="track-result-container" id="track-results-wrap">
+
+        <!-- 2. REQUEST RESULT SUMMARY CARD -->
+        <div class="track-summary-card">
+          <div class="summary-card-header">
+            <div class="summary-id-group">
+              <div>
+                <span class="summary-id-label">Official Complaint ID</span>
+                <div class="summary-id-value" id="res-complaint-id">LOK-2026-7853</div>
+              </div>
+            </div>
+            <div id="res-status-badge" class="status-badge-lg status-badge-in-progress">
+              In Progress
+            </div>
+          </div>
+
+          <div class="summary-fields-grid">
+            <div class="summary-field-box">
+              <span class="summary-field-key">Issue Category</span>
+              <div class="summary-field-val" id="res-category">💧 Water</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Subcategory</span>
+              <div class="summary-field-val" id="res-subcategory">Broken Pipeline</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Issue Under Department</span>
+              <div class="summary-field-val" id="res-department">Water Supply Department</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Location</span>
+              <div class="summary-field-val" id="res-location">Station Road near Metro Pillar 42, Ward 12</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Submitted Date</span>
+              <div class="summary-field-val" id="res-submitted-date">Today, 08:30 AM</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Priority Score</span>
+              <div class="summary-field-val metric-priority-high" id="res-priority">Critical (95/100)</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Expected SLA</span>
+              <div class="summary-field-val" id="res-expected-sla">6 Hours (Target: 02:30 PM)</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Current Status</span>
+              <div class="summary-field-val" style="color: var(--royal-blue);" id="res-current-status">In Progress</div>
+            </div>
+            <div class="summary-field-box">
+              <span class="summary-field-key">Verification Integrity</span>
+              <div class="summary-field-val" style="color: var(--civic-green-dark);">✓ EXIF & GPS Tagged</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. STATUS TIMELINE (VERTICAL TIMELINE) -->
+        <div class="track-section-card">
+          <div class="form-section-header">
+            <span class="step-badge-num">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+            </span>
+            <div class="form-section-title">
+              <h3>Status Timeline</h3>
+              <span>Stage-by-stage progression verified by Municipal Audit Ledger</span>
+            </div>
+          </div>
+
+          <div class="timeline-vertical-wrap" id="timeline-steps-container">
+            <!-- Dynamically populated vertical timeline steps -->
+          </div>
+        </div>
+
+        <!-- 4. LATEST UPDATE -->
+        <div class="latest-update-card">
+          <div class="latest-update-header">
+            <span class="latest-update-badge">
+              <span>📢</span>
+              <span>Latest Official Field Update</span>
+            </span>
+            <span style="font-size: 0.8125rem; font-weight: 700; color: var(--navy-900);" id="latest-update-time">Today, 09:40 AM</span>
+          </div>
+
+          <div class="latest-update-quote">
+            <p id="latest-update-text">
+              "Field Maintenance Unit #4 deployed on-site. Isolation valve shut off to stop surface flooding. Replacement 150mm ductile iron pipe segment being welded. Expected completion in ~2 hours."
+            </p>
+            <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px; font-weight: 600;" id="latest-update-officer">
+              Official Note: Er. R. Deshmukh, Junior Engineer (Water Works)
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. SLA STATUS -->
+        <div class="sla-status-card">
+          <div class="sla-telemetry-row">
+            <div>
+              <span style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; display: block;">Citizen Charter SLA Status</span>
+              <div style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; color: var(--navy-900);">
+                Service Level Agreement Telemetry
+              </div>
+            </div>
+            <span class="metric-pill metric-priority-norm" id="sla-status-pill">On Track</span>
+          </div>
+
+          <div class="sla-progress-track">
+            <div class="sla-progress-fill status-green" id="sla-progress-fill-bar" style="width: 55%;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8125rem;">
+            <span style="color: var(--text-secondary); font-weight: 600;" id="sla-remaining-time-text">Remaining: 2h 45m (Within SLA target)</span>
+            <span style="color: var(--text-muted);">Standard SLA: 6 Hours</span>
+          </div>
+        </div>
+
+        <!-- 6. ACTIONS -->
+        <div class="track-actions-bar">
+          <button type="button" class="btn btn-secondary" id="btn-view-details">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+            <span>View Complaint Details</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="btn-add-info">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            <span>Add Additional Information</span>
+          </button>
+          <a href="submit.html" class="btn btn-primary">
+            <span>Report Issue Again</span>
+            <span class="btn-icon">&rarr;</span>
+          </a>
+          <a href="index.html" class="btn btn-secondary">
+            <span>Back to Home</span>
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ========================================================================
+       MODAL 1: VIEW COMPLAINT DETAILS
+       ======================================================================== -->
+  <div class="modal-backdrop" id="details-modal">
+    <div class="modal-window" style="max-width: 600px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3>Full Complaint Record</h3>
+          <span id="modal-detail-id" style="font-family: monospace; font-weight: 700; color: var(--royal-blue);">LOK-2026-7853</span>
+        </div>
+        <button class="modal-close" id="close-details-modal" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 24px; font-size: 0.875rem;">
+        <div style="margin-bottom: 16px;">
+          <strong style="display: block; color: var(--navy-900); margin-bottom: 4px;">Citizen Statement:</strong>
+          <p id="modal-detail-desc" style="color: var(--text-secondary); line-height: 1.6; background: var(--bg-surface-alt); padding: 12px; border-radius: var(--radius-md);"></p>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div>
+            <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">People Affected</span>
+            <strong id="modal-detail-affected"></strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">GPS Coordinates</span>
+            <strong id="modal-detail-coords" style="font-family: monospace;"></strong>
+          </div>
+        </div>
+        <div style="margin-bottom: 16px;">
+          <span style="color: var(--text-muted); display: block; font-size: 0.75rem;">Evidence & AI Ingestion</span>
+          <strong id="modal-detail-evidence" style="color: var(--civic-green-dark);"></strong>
+        </div>
+      </div>
+      <div class="modal-footer" style="padding: 16px 24px; background: var(--bg-surface-alt); border-top: 1px solid var(--border-subtle); text-align: right;">
+        <button class="btn btn-secondary" onclick="document.getElementById('details-modal').classList.remove('active')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL 2: ADD ADDITIONAL INFORMATION
+       ======================================================================== -->
+  <div class="modal-backdrop" id="add-info-modal">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header">
+        <div class="modal-title-group">
+          <h3>Add Additional Information</h3>
+          <span>Your note will be appended directly to the field officer's work docket</span>
+        </div>
+        <button class="modal-close" id="close-add-info-modal" aria-label="Close modal">&times;</button>
+      </div>
+      <form id="form-add-info">
+        <div class="modal-body" style="padding: 24px;">
+          <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: var(--navy-900); margin-bottom: 8px;">
+            Additional Note or Milestone Update:
+          </label>
+          <textarea id="citizen-new-info" class="desc-textarea" placeholder="e.g., Water flow has stopped; repair crew has begun refilling the pit..." required style="min-height: 100px;"></textarea>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+            Field Officer Er. R. Deshmukh will receive an instant notification.
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 16px 24px; background: var(--bg-surface-alt); border-top: 1px solid var(--border-subtle); display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('add-info-modal').classList.remove('active')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Dispatch Update →</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" style="padding: 48px 0 24px;">
+    <div class="container" style="text-align: center; font-size: 0.8125rem; color: var(--text-inverse-muted);">
+      <div>© 2026 LokVaani AI. Citizen Grievance Redressal & Governance Intelligence Platform.</div>
+    </div>
+  </footer>
+
+  <!-- Track Engine Script -->
+  <script src="js/track.js"></script>
+</body>
+</html>

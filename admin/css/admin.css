@@ -1,0 +1,1272 @@
+/* ==========================================================================
+   LOKVAANI AI — ADMINISTRATOR PORTAL COMMAND CENTER STYLESHEET
+   Aesthetic: Light Indian Civic Command Center & Senior Governance Console
+   Colors: Deep Saffron #FF9933 / #E65100, India Green #138808, Ashoka Navy #000080 / #071324, Saffron Gold #D4AF37
+   Background: #F8FAFC | Surface: #FFFFFF | Text: #0F172A, #475569, #64748B
+   ========================================================================== */
+
+:root {
+  --admin-navy-950: #040A14;
+  --admin-navy-900: #071324;
+  --admin-navy-850: #0B1F3A;
+  --admin-navy-800: #0F284B;
+  --admin-navy-700: #14335C;
+  --tiranga-saffron: #FF9933;
+  --tiranga-saffron-dark: #E65100;
+  --tiranga-green: #138808;
+  --tiranga-green-dark: #15803D;
+  --ashoka-navy: #000080;
+  --royal-gold: #D4AF37;
+
+  --admin-card-bg: #FFFFFF;
+  --admin-card-radius: 10px;
+  --admin-border-subtle: #E2E8F0;
+  --admin-shadow-sm: 0 1px 3px rgba(7, 19, 36, 0.05), 0 1px 2px rgba(7, 19, 36, 0.03);
+  --admin-shadow-md: 0 4px 12px rgba(7, 19, 36, 0.08);
+  --admin-shadow-elevated: 0 8px 24px rgba(7, 19, 36, 0.12);
+}
+
+/* Reset & Layout Container */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: #F8FAFC;
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tricolor Header Strip */
+.tricolor-header-strip {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #FF9933 0%, #FF9933 33.33%, #FFFFFF 33.33%, #FFFFFF 66.66%, #138808 66.66%, #138808 100%);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.admin-app {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 4px;
+}
+
+/* ==========================================================================
+   1. FIXED SIDEBAR NAVIGATION
+   ========================================================================== */
+.admin-sidebar {
+  width: 270px;
+  background: var(--admin-navy-950);
+  color: var(--text-inverse);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 4px;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform var(--transition-normal);
+}
+
+.admin-sidebar-header {
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.admin-logo {
+  height: 38px;
+  width: 38px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1.5px solid var(--tiranga-saffron);
+}
+
+.admin-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
+.admin-brand-title span {
+  color: var(--tiranga-saffron);
+}
+
+.brand-hi-sub {
+  font-size: 0.75rem;
+  color: var(--tiranga-saffron);
+  font-weight: 700;
+  margin-left: 2px;
+}
+
+.admin-brand-sub {
+  font-size: 0.65625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-inverse-muted);
+  font-weight: 700;
+  display: block;
+}
+
+.admin-sidebar-nav {
+  padding: 14px 10px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.admin-nav-category {
+  font-size: 0.65625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-inverse-muted);
+  padding: 10px 10px 4px;
+  font-weight: 800;
+}
+
+.admin-sidebar-menu {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  color: var(--text-inverse-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+}
+
+.admin-sidebar-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #FFFFFF;
+}
+
+.admin-sidebar-link.active {
+  background: linear-gradient(90deg, rgba(255, 153, 51, 0.18) 0%, rgba(19, 136, 8, 0.12) 100%);
+  color: #FFFFFF;
+  border-left: 3.5px solid var(--tiranga-saffron);
+  box-shadow: inset 0 0 10px rgba(255, 153, 51, 0.08);
+}
+
+.admin-sidebar-link svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--text-inverse-muted);
+  transition: stroke var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.admin-sidebar-link.active svg {
+  stroke: var(--tiranga-saffron);
+}
+
+.sidebar-escalation-badge {
+  margin-left: auto;
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  animation: pulse-red-badge 2s infinite;
+}
+
+@keyframes pulse-red-badge {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.6); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 5px rgba(220, 38, 38, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+/* Sidebar Operational Status Widget */
+.sidebar-status-box {
+  margin: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  font-size: 0.71875rem;
+  color: var(--text-inverse-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.status-box-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.status-box-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tiranga-green);
+  box-shadow: 0 0 6px var(--tiranga-green);
+}
+
+/* Sidebar Footer Profile */
+.admin-sidebar-profile {
+  padding: 12px 14px;
+  margin: 0 10px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.admin-profile-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF9933, #138808);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+}
+
+.admin-profile-name {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-profile-title {
+  font-size: 0.6875rem;
+  color: var(--text-inverse-muted);
+}
+
+/* ==========================================================================
+   2. MAIN CONTENT AREA & LIGHT INDIAN CIVIC TOPBAR
+   ========================================================================== */
+.admin-main {
+  margin-left: 270px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-topbar {
+  height: 64px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 4px;
+  z-index: 90;
+}
+
+.topbar-title-head {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  line-height: 1.2;
+}
+
+.topbar-breadcrumb {
+  font-size: 0.71875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.india-gov-badge {
+  background: #FFF3E0;
+  color: #E65100;
+  border: 1px solid #FFE0B2;
+  font-weight: 800;
+  font-size: 0.71875rem;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  letter-spacing: 0.02em;
+}
+
+.admin-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.admin-search-wrap {
+  position: relative;
+  width: 260px;
+}
+
+.topbar-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.admin-search-wrap input {
+  width: 100%;
+  padding: 7px 14px 7px 34px;
+  background: #F8FAFC;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  outline: none;
+  transition: all var(--transition-fast);
+}
+
+.admin-search-wrap input:focus {
+  border-color: var(--tiranga-saffron);
+  background: #FFFFFF;
+  box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+}
+
+.notification-bell-btn {
+  background: #F8FAFC;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--navy-900);
+  position: relative;
+  transition: all var(--transition-fast);
+}
+
+.notification-bell-btn:hover {
+  background: #FFFFFF;
+  border-color: var(--tiranga-saffron);
+}
+
+.bell-unread-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 0.625rem;
+  font-weight: 800;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #FFFFFF;
+}
+
+.notification-dropdown {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 320px;
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-card-radius);
+  box-shadow: var(--admin-shadow-elevated);
+  padding: 14px;
+  z-index: 160;
+  display: none;
+}
+
+.notification-dropdown.active {
+  display: block;
+  animation: fadeIn 150ms ease-out;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+}
+
+.notif-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.notif-item {
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: #F8FAFC;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  font-size: 0.8125rem;
+}
+
+.notif-item:hover {
+  background: #FFF3E0;
+}
+
+.notif-item.unread {
+  border-left: 3.5px solid var(--tiranga-saffron);
+  background: #FFF8E1;
+}
+
+.admin-profile-chip-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 10px 3px 3px;
+  background: #F8FAFC;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+}
+
+.profile-dropdown-panel {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  width: 280px;
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: var(--admin-card-radius);
+  box-shadow: var(--admin-shadow-elevated);
+  padding: 16px;
+  z-index: 160;
+  display: none;
+}
+
+.profile-dropdown-panel.active {
+  display: block;
+  animation: fadeIn 150ms ease-out;
+}
+
+.admin-body {
+  padding: 24px 28px;
+  flex: 1;
+}
+
+.admin-view-section {
+  display: none;
+}
+
+.admin-view-section.active {
+  display: block;
+  animation: fadeIn 200ms ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   3. DATA TABLES & SPACIOUS LIST WRAPPERS (LIGHT INDIAN ACCENTS)
+   ========================================================================== */
+.complaints-table-wrap, .audit-table-wrap {
+  overflow-x: auto;
+  border-radius: var(--admin-card-radius);
+  border: 1px solid var(--admin-border-subtle);
+  background: #FFFFFF;
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.complaints-table, .audit-table, .status-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.84375rem;
+  line-height: 1.5;
+}
+
+.complaints-table th, .audit-table th, .status-table th {
+  background: #F8FAFC;
+  color: var(--navy-900);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.71875rem;
+  letter-spacing: 0.05em;
+  padding: 14px 18px;
+  border-bottom: 1.5px solid var(--admin-border-subtle);
+  white-space: nowrap;
+  text-align: left;
+}
+
+.complaints-table td, .audit-table td, .status-table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  vertical-align: middle;
+  color: var(--text-primary);
+  transition: background var(--transition-fast);
+}
+
+.complaints-table tbody tr:hover, .audit-table tbody tr:hover, .status-table tbody tr:hover {
+  background: #FFFDF9;
+}
+
+.complaints-table tbody tr:last-child td, .audit-table tbody tr:last-child td, .status-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Status Dot Pills & Actor Badges */
+.status-dot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.st-green { background: #E8F5E9; color: #138808; border: 1px solid #C8E6C9; }
+.st-amber { background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; }
+.st-red { background: #FFEBEE; color: #C62828; border: 1px solid #FFCDD2; }
+.st-escalated { background: #FFF3E0; color: #E65100; border: 1px solid #FFE0B2; }
+.st-resolved { background: #E8F5E9; color: #138808; border: 1px solid #C8E6C9; }
+
+.actor-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.actor-admin { background: #FFF8E1; color: #B45309; border: 1px solid #FDE68A; }
+.actor-officer { background: #EFF6FF; color: #1D4ED8; border: 1px solid #BFDBFE; }
+.actor-ai { background: #ECFEFF; color: #0891B2; border: 1px solid #A5F3FC; }
+.actor-system { background: #F8FAFC; color: #475569; border: 1px solid #E2E8F0; }
+
+/* Buttons Enhancement */
+.btn-primary {
+  background: var(--tiranga-saffron);
+  border: 1px solid var(--tiranga-saffron-dark);
+  color: #000000;
+  font-weight: 800;
+}
+
+.btn-primary:hover {
+  background: #E65100;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   4. MODAL WINDOW & CONSOLE STYLING (PERFECT DIALOG SYSTEM)
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(7, 19, 36, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.modal-backdrop.active {
+  display: flex;
+  animation: fadeIn 150ms ease-out;
+}
+
+.modal-window, .modal-window-lg {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 24px 60px rgba(7, 19, 36, 0.4);
+  border: 1px solid var(--admin-border-subtle);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+  width: 100%;
+  animation: modalSlideUp 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-window {
+  max-width: 520px;
+}
+
+.modal-window-lg {
+  max-width: 940px;
+}
+
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header, .modal-admin-header {
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  background: var(--admin-navy-950);
+  color: #FFFFFF;
+  flex-shrink: 0;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  color: #FFFFFF;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.modal-body, .modal-body-scroll {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+  background: #F8FAFC;
+}
+
+/* Two-Column Grid for Review Case Modal */
+.detail-layout-grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.detail-card-panel {
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.card-title-head {
+  font-family: var(--font-heading);
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+}
+
+.citizen-report-box {
+  background: #F8FAFC;
+  border: 1px solid var(--admin-border-subtle);
+  border-left: 4px solid var(--tiranga-saffron);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--navy-900);
+  line-height: 1.5;
+}
+
+.ai-priority-breakdown-card {
+  background: #FFF5F5;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+
+.seg-service { background: #DC2626; }
+.seg-delay { background: #EA580C; }
+.seg-citizens { background: #D97706; }
+.seg-vulnerable { background: #CA8A04; }
+.seg-sentiment { background: #65A30D; }
+
+.profile-field-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--admin-border-subtle);
+  font-size: 0.875rem;
+}
+
+.field-lbl {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.field-val {
+  color: var(--navy-900);
+  font-weight: 800;
+}
+
+.form-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  outline: none;
+  resize: vertical;
+}
+
+.form-textarea:focus {
+  border-color: var(--tiranga-saffron);
+  box-shadow: 0 0 0 3px rgba(255, 153, 51, 0.2);
+}
+
+/* ==========================================================================
+   5. COMMAND CENTER MAIN 2-COLUMN GRID LAYOUT
+   ========================================================================== */
+.command-header-bar {
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-top: 3.5px solid var(--tiranga-saffron);
+  border-radius: var(--admin-card-radius);
+  padding: 20px 24px;
+  margin-bottom: 20px;
+  box-shadow: var(--admin-shadow-sm);
+  display: grid;
+  grid-template-columns: 240px 1.4fr 1.6fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.city-health-dial-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-right: 1px solid var(--admin-border-subtle);
+  padding-right: 20px;
+}
+
+.radial-svg-wrap {
+  width: 74px;
+  height: 74px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.radial-svg-wrap svg {
+  transform: rotate(-90deg);
+}
+
+.radial-score-val {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--navy-900);
+}
+
+.city-health-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-health-title {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.city-health-status-text {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--tiranga-green-dark);
+  margin-top: 2px;
+}
+
+.primary-metric-box {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--admin-border-subtle);
+  padding-right: 20px;
+}
+
+.primary-metric-num {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  line-height: 1;
+}
+
+.primary-metric-lbl {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.secondary-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+}
+
+.sec-metric-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.sec-metric-val {
+  font-family: var(--font-heading);
+  font-size: 1.125rem;
+  font-weight: 800;
+  color: var(--navy-900);
+}
+
+.sec-metric-lbl {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.metric-accent-red { color: #DC2626; }
+.metric-accent-green { color: var(--tiranga-green-dark); }
+.metric-accent-amber { color: var(--tiranga-saffron-dark); }
+
+.filter-select {
+  padding: 8px 14px;
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  color: var(--navy-900);
+  font-weight: 600;
+  outline: none;
+  cursor: pointer;
+}
+
+.filter-select:focus {
+  border-color: var(--tiranga-saffron);
+}
+
+/* ==========================================================================
+   6. COMMAND CENTER MAIN 2-COLUMN GRID LAYOUT
+   ========================================================================== */
+.command-center-layout {
+  display: grid;
+  grid-template-columns: 1.65fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.cmd-panel {
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-top: 3px solid var(--tiranga-saffron);
+  border-radius: var(--admin-card-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.cmd-panel-focal {
+  border: 1.5px solid #FCA5A5;
+  border-top: 4px solid #DC2626;
+  border-left: 5px solid #DC2626;
+  background: #FFFFFF;
+}
+
+.cmd-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--admin-border-subtle);
+}
+
+.cmd-panel-title {
+  font-family: var(--font-heading);
+  font-size: 1.0625rem;
+  font-weight: 800;
+  color: var(--navy-900);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ==========================================================================
+   7. ATTENTION REQUIRED ESCALATION CARDS
+   ========================================================================== */
+.escalation-rich-card {
+  background: #FFF5F5;
+  border: 1px solid #FECACA;
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.esc-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.esc-overdue-tag {
+  background: #DC2626;
+  color: #FFFFFF;
+  font-size: 0.71875rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  animation: pulse-red-badge 2s infinite;
+}
+
+.esc-issue-desc {
+  font-size: 0.90625rem;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.esc-meta-row {
+  display: flex;
+  gap: 20px;
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+}
+
+.ai-segmented-bar {
+  height: 8px;
+  background: #E2E8F0;
+  border-radius: 9999px;
+  display: flex;
+  overflow: hidden;
+  margin: 6px 0;
+}
+
+.seg-item { height: 100%; }
+
+/* ==========================================================================
+   8. DEPARTMENT HEALTH OVERVIEW & CARDS
+   ========================================================================== */
+.dept-health-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.dept-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8125rem;
+}
+
+.dept-bar-name {
+  width: 110px;
+  font-weight: 700;
+  color: var(--navy-900);
+}
+
+.dept-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #F8FAFC;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.dept-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+}
+
+.dept-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.dept-mini-card {
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-top: 3px solid var(--tiranga-saffron);
+  border-radius: 8px;
+  padding: 16px 18px;
+  box-shadow: var(--admin-shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.dept-mini-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--tiranga-saffron);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.dept-full-card {
+  background: #FFFFFF;
+  border: 1px solid var(--admin-border-subtle);
+  border-top: 3.5px solid var(--tiranga-saffron);
+  border-radius: var(--admin-card-radius);
+  padding: 20px 22px;
+  box-shadow: var(--admin-shadow-sm);
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dept-full-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-shadow-md);
+  border-color: var(--tiranga-saffron-dark);
+}
+
+/* ==========================================================================
+   9. AI CITY INTELLIGENCE PANEL
+   ========================================================================== */
+.ai-panel-dark {
+  background: var(--admin-navy-900);
+  color: #FFFFFF;
+  border-radius: var(--admin-card-radius);
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(0, 210, 238, 0.25);
+  border-top: 3.5px solid var(--tiranga-saffron);
+  box-shadow: var(--admin-shadow-md);
+}
+
+.ai-insight-box-clean {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 0.8125rem;
+}
+
+.ai-conf-tag {
+  background: rgba(0, 210, 238, 0.18);
+  color: var(--ai-cyan);
+  font-weight: 800;
+  font-size: 0.6875rem;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   10. CITY OPERATIONS MAP (INTERACTIVE MUNICIPAL ZONE GRID)
+   ========================================================================== */
+.municipal-map-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.zone-map-tile {
+  background: #F8FAFC;
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.zone-map-tile:hover {
+  transform: translateY(-2px);
+  border-color: var(--tiranga-saffron);
+  box-shadow: var(--admin-shadow-sm);
+}
+
+.tile-crit { border-color: #FCA5A5; background: #FFF5F5; }
+.tile-high { border-color: #FDE68A; background: #FFFBEB; }
+
+/* ==========================================================================
+   11. ADMINISTRATIVE CONTROL CENTER (2x3 COMMAND GRID)
+   ========================================================================== */
+.control-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.control-card-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 8px;
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.control-card-item:hover {
+  border-color: var(--tiranga-saffron);
+  box-shadow: var(--admin-shadow-sm);
+  transform: translateY(-2px);
+}
+
+.control-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: #FFF3E0;
+  color: #E65100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   12. RECENT ADMIN ACTIVITY TIMELINE
+   ========================================================================== */
+.activity-timeline-wrap {
+  position: relative;
+  padding-left: 20px;
+  list-style: none;
+  margin-top: 10px;
+}
+
+.activity-timeline-wrap::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--admin-border-subtle);
+}
+
+.act-item {
+  position: relative;
+  margin-bottom: 14px;
+  font-size: 0.8125rem;
+}
+
+.act-dot {
+  position: absolute;
+  left: -20px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--tiranga-saffron);
+  border: 2px solid #FFFFFF;
+}
+
+/* ==========================================================================
+   RESPONSIVE DESIGN ADAPTATIONS
+   ========================================================================== */
+@media (max-width: 1280px) {
+  .command-header-bar {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .command-center-layout {
+    grid-template-columns: 1fr;
+  }
+  .city-health-dial-card, .primary-metric-box {
+    border-right: none;
+    padding-right: 0;
+  }
+  .detail-layout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-main {
+    margin-left: 0;
+  }
+  .municipal-map-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .control-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dept-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

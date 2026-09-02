@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LokVaani AI — Municipal Command Center | लोकवाणी</title>
+  <meta name="description" content="AI-Powered Municipal Operations Command Center & Senior Governance Intelligence Platform.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../assets/lokvaani-logo.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared Design Tokens & Stylesheet -->
+  <link rel="stylesheet" href="../css/styles.css">
+
+  <!-- Dedicated Isolated Administrator Stylesheet -->
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- National Tricolor Header Accent Strip -->
+  <div class="tricolor-header-strip"></div>
+
+  <div class="admin-app">
+    <!-- ========================================================================
+         1. SIDEBAR — REFINED PREMIUM INDIAN CIVIC COMMAND CENTER NAV
+         ======================================================================== -->
+    <aside class="admin-sidebar" aria-label="Administrator Command Center Navigation">
+      <div class="admin-sidebar-header">
+        <img src="../assets/lokvaani-logo.png" alt="LokVaani AI Emblem" class="admin-logo">
+        <div>
+          <div class="admin-brand-title">LokVaani <span>AI</span> <span class="brand-hi-sub">लोकवाणी</span></div>
+          <span class="admin-brand-sub">भारत सरकार • Municipal Command</span>
+        </div>
+      </div>
+
+      <nav class="admin-sidebar-nav">
+        <div class="admin-nav-category">Strategic Oversight • प्रशासनिक निगरानी</div>
+        <ul class="admin-sidebar-menu">
+          <li>
+            <button class="admin-sidebar-link active" data-view="overview">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+              </svg>
+              <span>Overview</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="escalations">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>Escalations</span>
+              <span class="sidebar-escalation-badge" id="sidebar-esc-count">3</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="departments">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <span>Departments</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="officers">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+              <span>Officers</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="admin-nav-category">City Monitoring • नगर निगरानी</div>
+        <ul class="admin-sidebar-menu">
+          <li>
+            <button class="admin-sidebar-link" data-view="complaints">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+              </svg>
+              <span>City Complaints</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="intelligence">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>City Intelligence</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="analytics">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+              <span>Analytics</span>
+            </button>
+          </li>
+          <li>
+            <button class="admin-sidebar-link" data-view="audit-log">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              </svg>
+              <span>Audit Log</span>
+            </button>
+          </li>
+        </ul>
+
+        <!-- System Operational Status Box -->
+        <div class="sidebar-status-box">
+          <div class="status-box-item">
+            <span class="status-box-dot"></span>
+            <span>AI Engine Operational</span>
+          </div>
+          <div class="status-box-item">
+            <span class="status-box-dot"></span>
+            <span>SLA Monitoring Active</span>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer Identity -->
+      <div class="admin-sidebar-profile" id="sidebar-profile-footer">
+        <div class="admin-profile-avatar">AS</div>
+        <div class="admin-profile-info">
+          <div class="admin-profile-name">Ananya Sharma</div>
+          <div class="admin-profile-title">Senior Municipal Officer</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ========================================================================
+         2. MAIN WORKSPACE & LIGHT INDIAN CIVIC TOPBAR
+         ======================================================================== -->
+    <main class="admin-main">
+      <!-- Compact Topbar Header -->
+      <header class="admin-topbar">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div>
+            <div class="topbar-breadcrumb" id="topbar-breadcrumb-text">Administration / Overview</div>
+            <h1 class="topbar-title-head" id="topbar-view-title">City Command Center</h1>
+          </div>
+          <span class="india-gov-badge">🇮🇳 Digital India • नगर निगम</span>
+        </div>
+
+        <div class="admin-topbar-right">
+          <!-- Search Input -->
+          <div class="admin-search-wrap">
+            <svg class="topbar-search-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="admin-search-input" placeholder="Search city departments, escalations, officers...">
+          </div>
+
+          <!-- Notification Bell Drawer Button -->
+          <div style="position: relative;">
+            <button class="notification-bell-btn" id="admin-notif-btn" aria-label="Notifications">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+              </svg>
+              <span class="bell-unread-dot" id="notif-badge-count">3</span>
+            </button>
+
+            <!-- Dropdown Drawer -->
+            <div class="notification-dropdown" id="admin-notif-dropdown">
+              <div class="notif-header">
+                <strong style="color: var(--navy-900);">System Alerts & Escalations</strong>
+                <button class="btn btn-secondary" id="mark-all-read-btn" style="padding: 2px 8px; font-size: 0.75rem;">Mark all read</button>
+              </div>
+              <ul class="notif-list" id="notif-list-container">
+                <!-- Dynamically populated -->
+              </ul>
+            </div>
+          </div>
+
+          <!-- Demo Story Button -->
+          <button class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.78125rem;" onclick="triggerAdminDemoStory()">
+            ⚡ Run Admin Demo Story
+          </button>
+
+          <!-- Administrator Profile Chip Button -->
+          <div style="position: relative;">
+            <button class="admin-profile-chip-btn" id="admin-profile-chip">
+              <div class="admin-profile-avatar" style="width: 28px; height: 28px; font-size: 0.75rem;">AS</div>
+              <span style="font-size: 0.8125rem; font-weight: 700; color: var(--navy-900);">Ananya Sharma</span>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+
+            <!-- Profile Dropdown Panel -->
+            <div class="profile-dropdown-panel" id="profile-dropdown-panel">
+              <div style="font-weight: 800; color: var(--navy-900); font-size: 0.875rem;">Ananya Sharma</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-bottom: 8px;">Senior Municipal Officer • City Command</div>
+              <div style="font-size: 0.71875rem; background: #FEF3C7; color: #B45309; padding: 3px 8px; border-radius: 4px; font-weight: 700; display: inline-block; margin-bottom: 10px;">
+                👑 Senior Administrator Authority
+              </div>
+              <div style="border-top: 1px solid var(--admin-border-subtle); padding-top: 8px; font-size: 0.78125rem;">
+                <div style="color: var(--text-muted);">ID: ADM-GOV-001 • Central Zone</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-body">
+        
+        <!-- ====================================================================
+             VIEW 1: OVERVIEW COMMAND CENTER (UNIFIED MULTI-COLUMN LAYOUT)
+             ==================================================================== -->
+        <section class="admin-view-section active" id="admin-view-overview">
+          
+          <!-- Integrated Top Command Bar (City Health Radial Dial + Metrics) -->
+          <div class="command-header-bar">
+            <!-- City Health Radial Gauge -->
+            <div class="city-health-dial-card">
+              <div class="radial-svg-wrap">
+                <svg width="74" height="74" viewBox="0 0 36 36">
+                  <path stroke="#E2E8F0" stroke-width="3.5" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path stroke="#FF9933" stroke-dasharray="78, 100" stroke-width="3.5" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span class="radial-score-val" id="city-health-score-val">78/100</span>
+              </div>
+              <div class="city-health-meta">
+                <span class="city-health-title">CITY HEALTH INDEX</span>
+                <span class="city-health-status-text">Stable, but requires attention</span>
+                <div style="font-size: 0.6875rem; color: var(--text-muted); margin-top: 4px;">SLA 86% • Res 78% • Critical 72%</div>
+              </div>
+            </div>
+
+            <!-- Primary Large Metric Box -->
+            <div class="primary-metric-box">
+              <span class="primary-metric-num" id="cmd-total-num">1,284</span>
+              <span class="primary-metric-lbl">TOTAL CIVIC COMPLAINTS</span>
+            </div>
+
+            <!-- Secondary Metrics Grid -->
+            <div class="secondary-metrics-grid">
+              <div class="sec-metric-item">
+                <span class="sec-metric-val metric-accent-green" id="cmd-resolved-num">842</span>
+                <span class="sec-metric-lbl">Resolved (65.5%)</span>
+              </div>
+              <div class="sec-metric-item">
+                <span class="sec-metric-val metric-accent-amber" id="cmd-pending-num">317</span>
+                <span class="sec-metric-lbl">Pending Triage</span>
+              </div>
+              <div class="sec-metric-item">
+                <span class="sec-metric-val metric-accent-red" id="cmd-breached-num">125</span>
+                <span class="sec-metric-lbl">SLA Breached (↑12.4%)</span>
+              </div>
+              <div class="sec-metric-item">
+                <span class="sec-metric-val metric-accent-red" id="cmd-critical-num">18</span>
+                <span class="sec-metric-lbl">Critical (↓8.2%)</span>
+              </div>
+              <div class="sec-metric-item">
+                <span class="sec-metric-val" id="cmd-officers-num">42</span>
+                <span class="sec-metric-lbl">Active Officers</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main 2-Column Command Center Layout -->
+          <div class="command-center-layout">
+            
+            <!-- LEFT COLUMN: Focal Escalations + Dept Health + Control Center -->
+            <div>
+              
+              <!-- 🚨 ATTENTION REQUIRED (FOCAL POINT) -->
+              <div class="cmd-panel cmd-panel-focal">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title" style="color: #991B1B;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <span>ATTENTION REQUIRED — Cases requiring administrator intervention</span>
+                  </h3>
+                  <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="adminState.currentView='escalations'; renderAdminCurrentView();">
+                    View All →
+                  </button>
+                </div>
+
+                <div id="attention-required-feed">
+                  <!-- Dynamically Populated Rich Escalation Cards -->
+                </div>
+              </div>
+
+              <!-- 🏛️ DEPARTMENT HEALTH -->
+              <div class="cmd-panel">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                    <span>DEPARTMENT HEALTH & SLA RATE</span>
+                  </h3>
+                  <button class="btn btn-secondary" style="padding: 4px 10px; font-size: 0.75rem;" onclick="adminState.currentView='departments'; renderAdminCurrentView();">
+                    View all departments →
+                  </button>
+                </div>
+
+                <!-- Horizontal Health Overview Bars -->
+                <div class="dept-health-bars" id="dept-health-bars-container">
+                  <!-- Dynamically Populated -->
+                </div>
+
+                <!-- Compact Department Cards -->
+                <div class="dept-cards-grid" id="dept-health-cards-container">
+                  <!-- Dynamically Populated -->
+                </div>
+              </div>
+
+              <!-- 👑 ADMINISTRATIVE CONTROL CENTER (2x3 COMMAND GRID) -->
+              <div class="cmd-panel">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    <span>ADMINISTRATIVE CONTROL CENTER</span>
+                  </h3>
+                </div>
+
+                <div class="control-cards-grid">
+                  <div class="control-card-item" data-action="authorize">
+                    <div class="control-icon-box">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">Authorize Officer</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Approve government personnel access</span>
+                    </div>
+                  </div>
+
+                  <div class="control-card-item" data-action="reassign">
+                    <div class="control-icon-box">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">Reassign Complaint</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Move case to another officer</span>
+                    </div>
+                  </div>
+
+                  <div class="control-card-item" data-action="escalate">
+                    <div class="control-icon-box">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polyline></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">Escalate Case</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Forward to department head</span>
+                    </div>
+                  </div>
+
+                  <div class="control-card-item" data-action="emergency">
+                    <div class="control-icon-box" style="background: #FEF3C7; color: #B45309;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">Emergency Response</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Authorize immediate intervention</span>
+                    </div>
+                  </div>
+
+                  <div class="control-card-item" data-action="suspend">
+                    <div class="control-icon-box" style="background: #FEE2E2; color: #B91C1C;">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">Suspend Officer</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Disable personnel authorization</span>
+                    </div>
+                  </div>
+
+                  <div class="control-card-item" data-action="policy">
+                    <div class="control-icon-box">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <div>
+                      <strong style="font-size: 0.8125rem; color: var(--navy-900); display: block;">SLA Policy Rules</strong>
+                      <span style="font-size: 0.71875rem; color: var(--text-muted);">Review operational SLA thresholds</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- RIGHT COLUMN: AI City Intelligence + Zone Map + Officer Watchlist + Timeline -->
+            <div>
+              
+              <!-- 🧠 AI CITY INTELLIGENCE -->
+              <div class="ai-panel-dark">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                  <h3 style="font-family: var(--font-heading); font-size: 1.0625rem; font-weight: 800; color: var(--ai-cyan); display: flex; align-items: center; gap: 8px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                    <span>AI CITY INTELLIGENCE</span>
+                  </h3>
+                </div>
+                <p style="font-size: 0.75rem; color: #94A3B8;">Signals detected from citizen complaint patterns across city zones.</p>
+
+                <div id="ai-intelligence-feed">
+                  <!-- Dynamically Populated 3 Concise AI Insights -->
+                </div>
+              </div>
+
+              <!-- 🗺️ CITY OPERATIONS MAP (INTERACTIVE MUNICIPAL ZONE GRID) -->
+              <div class="cmd-panel">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
+                    <span>CITY OPERATIONS MAP</span>
+                  </h3>
+                  <span style="font-size: 0.6875rem; color: var(--text-muted); font-weight: 700;">Click zone for details</span>
+                </div>
+
+                <div class="municipal-map-grid" id="municipal-map-tiles-container">
+                  <!-- Dynamically Populated 8 Municipal Zones -->
+                </div>
+              </div>
+
+              <!-- 👤 OFFICER WATCHLIST -->
+              <div class="cmd-panel">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                    <span>OFFICER WATCHLIST</span>
+                  </h3>
+                  <button class="btn btn-secondary" style="padding: 2px 8px; font-size: 0.71875rem;" onclick="adminState.currentView='officers'; renderAdminCurrentView();">
+                    View Officers →
+                  </button>
+                </div>
+
+                <table class="status-table" style="font-size: 0.78125rem;">
+                  <thead>
+                    <tr>
+                      <th>Officer</th>
+                      <th>Dept</th>
+                      <th>Cases</th>
+                      <th>SLA Rate</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="officer-watchlist-tbody">
+                    <!-- Dynamically Populated -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- 📜 RECENT ADMIN ACTIVITY TIMELINE -->
+              <div class="cmd-panel">
+                <div class="cmd-panel-head">
+                  <h3 class="cmd-panel-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    <span>RECENT ADMIN ACTIVITY</span>
+                  </h3>
+                </div>
+
+                <ul class="activity-timeline-wrap" id="recent-admin-activity-timeline">
+                  <!-- Dynamically Populated -->
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ====================================================================
+             VIEW 2: ESCALATION DECISION MANAGEMENT
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-escalations">
+          <div class="view-header" style="margin-bottom: 20px;">
+            <div>
+              <h1 class="view-greeting-title">Escalation Decision Management</h1>
+              <p class="view-subtitle">Review escalated cases, reassign officers, authorize emergency response, or escalate to Department Heads.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select class="filter-select" id="filter-escalation-status" onchange="renderEscalationsView()">
+                <option value="all">All Escalation Statuses</option>
+                <option value="Pending Action">Pending Action</option>
+                <option value="Reassigned">Reassigned</option>
+                <option value="Escalated to Dept Head">Escalated to Dept Head</option>
+                <option value="Resolved">Resolved</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Escalations Summary Banner Bar -->
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #DC2626;">
+              <span class="sec-metric-lbl">Active Escalations</span>
+              <div class="primary-metric-num" style="color: #DC2626; font-size: 1.625rem;" id="esc-summary-active">3</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Pending Action</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Avg Priority Score</span>
+              <div class="primary-metric-num" style="color: #E65100; font-size: 1.625rem;">93.6 / 100</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Critical Priority</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">Reassigned Cases</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.625rem;" id="esc-summary-reassigned">1</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Transferred to Senior Officers</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #DC2626;">
+              <span class="sec-metric-lbl">SLA Breach Duration</span>
+              <div class="primary-metric-num" style="color: #DC2626; font-size: 1.625rem;">1h 13m</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Max Overdue Threshold</div>
+            </div>
+          </div>
+
+          <div class="cmd-panel">
+            <div class="complaints-table-wrap">
+              <table class="complaints-table">
+                <thead>
+                  <tr>
+                    <th>Escalation ID</th>
+                    <th>Complaint ID</th>
+                    <th>Issue & Location</th>
+                    <th>Department</th>
+                    <th>Assigned Officer</th>
+                    <th>AI Score</th>
+                    <th>Breach Duration</th>
+                    <th>Status</th>
+                    <th>Decision Action</th>
+                  </tr>
+                </thead>
+                <tbody id="escalations-list-tbody">
+                  <!-- Dynamically Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 3: DEPARTMENTS MANAGEMENT
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-departments">
+          <div class="view-header" style="margin-bottom: 20px;">
+            <div>
+              <h1 class="view-greeting-title">Municipal Departments Performance</h1>
+              <p class="view-subtitle">Monitor departmental workloads, SLA health metrics, and active officer allocation.</p>
+            </div>
+          </div>
+
+          <!-- Departments Summary Banner Bar -->
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Total Departments</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.625rem;">7</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Municipal Divisions</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">Average SLA Rate</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.625rem;">87.1%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">City Benchmark Target: 85%</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #DC2626;">
+              <span class="sec-metric-lbl">High Risk Divisions</span>
+              <div class="primary-metric-num" style="color: #DC2626; font-size: 1.625rem;">1</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Roads & PWD (76% SLA)</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #000080;">
+              <span class="sec-metric-lbl">Total Active Officers</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.625rem;">59</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Deploys across 8 Zones</div>
+            </div>
+          </div>
+
+          <div class="analytics-grid" id="departments-grid-container">
+            <!-- Dynamically Populated Department Cards -->
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 4: OFFICER MANAGEMENT & AUTHORIZATION
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-officers">
+          <div class="view-header" style="margin-bottom: 20px;">
+            <div>
+              <h1 class="view-greeting-title">Department Officers Directory & Authorization</h1>
+              <p class="view-subtitle">Authorize new officers, assign zones/teams, monitor individual SLA compliance, or suspend accounts.</p>
+            </div>
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <select class="filter-select" id="filter-officer-status" onchange="renderOfficersView()">
+                <option value="all">All Officer Statuses</option>
+                <option value="Active">Active Officers</option>
+                <option value="Needs Attention">Needs Attention</option>
+                <option value="Pending Approval">Pending Authorization</option>
+                <option value="Suspended">Suspended</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Officers Summary Bar -->
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #000080;">
+              <span class="sec-metric-lbl">Active Personnel</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.625rem;">42</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Authorized Officers</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Pending Approval</span>
+              <div class="primary-metric-num" style="color: #E65100; font-size: 1.625rem;">1</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Field Inspector Trainee</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #DC2626;">
+              <span class="sec-metric-lbl">Needs Attention</span>
+              <div class="primary-metric-num" style="color: #DC2626; font-size: 1.625rem;">2</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">SLA &lt; 80%</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">Top SLA Performer</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.625rem;">98%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Er. Suresh Patel</div>
+            </div>
+          </div>
+
+          <div class="cmd-panel">
+            <div class="complaints-table-wrap">
+              <table class="complaints-table">
+                <thead>
+                  <tr>
+                    <th>Officer Name & Contact</th>
+                    <th>Title & Rank</th>
+                    <th>Department</th>
+                    <th>Jurisdiction</th>
+                    <th>Active Load</th>
+                    <th>Resolved</th>
+                    <th>SLA Compliance</th>
+                    <th>Status</th>
+                    <th>Authorization Action</th>
+                  </tr>
+                </thead>
+                <tbody id="officers-tbody">
+                  <!-- Dynamically Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 5: CITY-WIDE COMPLAINTS MONITORING
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-complaints">
+          <div class="view-header" style="margin-bottom: 20px;">
+            <div>
+              <h1 class="view-greeting-title">City-Wide Complaints Register</h1>
+              <p class="view-subtitle">Master view of ALL citizen complaints across all municipal departments in Central Zone.</p>
+            </div>
+          </div>
+
+          <!-- Complaints Summary Banner -->
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Total Ingested</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.625rem;">1,284</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Citizen Reports</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">Resolved</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.625rem;">842</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">65.5% Resolution Rate</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Active Triage</span>
+              <div class="primary-metric-num" style="color: #E65100; font-size: 1.625rem;">317</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Pending Field Verification</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #DC2626;">
+              <span class="sec-metric-lbl">SLA Breached</span>
+              <div class="primary-metric-num" style="color: #DC2626; font-size: 1.625rem;">125</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Requires Admin Action</div>
+            </div>
+          </div>
+
+          <div class="cmd-panel">
+            <div class="complaints-table-wrap">
+              <table class="complaints-table">
+                <thead>
+                  <tr>
+                    <th>Complaint ID</th>
+                    <th>Category</th>
+                    <th>Department</th>
+                    <th>Assigned Officer</th>
+                    <th>Location</th>
+                    <th>AI Score</th>
+                    <th>SLA State</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="city-complaints-tbody">
+                  <!-- Dynamically Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 6: CITY INTELLIGENCE & AI GOVERNANCE INSIGHTS
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-intelligence">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">AI City Intelligence & Governance Insights</h1>
+              <p class="view-subtitle">Emerging patterns detected across citizen complaints and automated policy recommendations.</p>
+            </div>
+          </div>
+
+          <div class="ai-panel-dark">
+            <h2 style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 800; color: var(--ai-cyan); margin-bottom: 4px;">
+              🧠 AI Municipal Governance Intelligence Feed
+            </h2>
+            <p style="font-size: 0.875rem; color: #94A3B8;">
+              System continuously analyzes cross-departmental grievance telemetry to identify systemic failure patterns and recommend preventive actions.
+            </p>
+
+            <div id="ai-insights-feed">
+              <!-- Dynamically Populated 3 Concise AI Insights -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 7: ADMIN ANALYTICS
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-analytics">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">City-Wide Analytics Dashboard</h1>
+              <p class="view-subtitle">Comprehensive resolution statistics, SLA breach trends, and citizen satisfaction index.</p>
+            </div>
+          </div>
+
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 24px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">City Resolution Rate</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.75rem;">65.5%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">842 of 1,284 Resolved</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #000080;">
+              <span class="sec-metric-lbl">Overall SLA Compliance</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.75rem;">88%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Benchmark Target: 85%</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Avg Resolution Time</span>
+              <div class="primary-metric-num" style="color: #E65100; font-size: 1.75rem;">14.2 hrs</div>
+              <div style="font-size: 0.75rem; color: #138808; margin-top: 4px;">↓ 2.4 hrs vs Last Month</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Citizen Satisfaction</span>
+              <div class="primary-metric-num" style="color: #B45309; font-size: 1.75rem;">4.4 / 5</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">140 Verified Ratings</div>
+            </div>
+          </div>
+
+          <div class="cmd-panel">
+            <div class="cmd-panel-head">
+              <h3 class="cmd-panel-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                <span>Municipal Resolution Velocity & Ingestion Trend</span>
+              </h3>
+            </div>
+            <div id="analytics-chart-container">
+              <!-- Dynamically populated SVG Chart -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 8: AUDIT LOG
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-audit-log">
+          <div class="view-header" style="margin-bottom: 20px;">
+            <div>
+              <h1 class="view-greeting-title">Governance Audit Log & Security Register</h1>
+              <p class="view-subtitle">Read-only transparent log tracking all AI classifications, officer actions, and administrator directives.</p>
+            </div>
+          </div>
+
+          <!-- Audit Log Summary Banner -->
+          <div class="secondary-metrics-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 20px;">
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #000080;">
+              <span class="sec-metric-lbl">Total Audit Logs</span>
+              <div class="primary-metric-num" style="color: var(--navy-900); font-size: 1.625rem;" id="audit-summary-total">5</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Recorded Security Events</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #FF9933;">
+              <span class="sec-metric-lbl">Admin Directives</span>
+              <div class="primary-metric-num" style="color: #E65100; font-size: 1.625rem;">2</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Ananya Sharma Interventions</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #000080;">
+              <span class="sec-metric-lbl">AI Core Telemetry</span>
+              <div class="primary-metric-num" style="color: var(--ai-cyan-dark); font-size: 1.625rem;">2</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Classifications & Escalations</div>
+            </div>
+            <div class="cmd-panel" style="margin-bottom: 0; padding: 16px; border-top: 3px solid #138808;">
+              <span class="sec-metric-lbl">Integrity Verification</span>
+              <div class="primary-metric-num" style="color: #138808; font-size: 1.625rem;">100%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 2px;">Immutable Cryptographic Verification</div>
+            </div>
+          </div>
+
+          <div class="cmd-panel">
+            <div class="audit-table-wrap">
+              <table class="audit-table">
+                <thead>
+                  <tr>
+                    <th>Timestamp</th>
+                    <th>Actor & Role</th>
+                    <th>Action Executed</th>
+                    <th>Target Ticket</th>
+                    <th>Department</th>
+                    <th>Audit Result</th>
+                  </tr>
+                </thead>
+                <tbody id="audit-log-tbody">
+                  <!-- Dynamically Populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====================================================================
+             VIEW 9: ADMIN PROFILE
+             ==================================================================== -->
+        <section class="admin-view-section" id="admin-view-profile">
+          <div class="view-header">
+            <div>
+              <h1 class="view-greeting-title">Administrator Credentials & Authority</h1>
+              <p class="view-subtitle">Senior Municipal Officer identity details and administrative permissions.</p>
+            </div>
+          </div>
+
+          <div class="cmd-panel" style="max-width: 700px; border-top: 4px solid #FF9933;">
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--admin-border-subtle);">
+              <div class="admin-profile-avatar" style="width: 64px; height: 64px; font-size: 1.5rem; background: linear-gradient(135deg, #FF9933, #138808);">AS</div>
+              <div>
+                <h2 id="admin-prof-name" style="font-family: var(--font-heading); font-size: 1.375rem; font-weight: 800; color: var(--navy-900);">Ananya Sharma</h2>
+                <div style="font-size: 0.875rem; color: #E65100; font-weight: 700;">Senior Municipal Officer • City Command Center</div>
+                <div style="margin-top: 4px; display: inline-block; font-size: 0.71875rem; background: #FFF3E0; color: #E65100; padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid #FFE0B2;">
+                  👑 Senior Administrator Authority • भारत सरकार
+                </div>
+              </div>
+            </div>
+
+            <div class="profile-field-row">
+              <span class="field-lbl">Admin ID:</span>
+              <span class="field-val">ADM-GOV-001</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Department:</span>
+              <span class="field-val">City Administration & Governance</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Jurisdiction:</span>
+              <span class="field-val">Central Municipal Zone (All 8 Zones)</span>
+            </div>
+            <div class="profile-field-row">
+              <span class="field-lbl">Official Email:</span>
+              <span class="field-val">ananya.sharma@lokvaani.gov.in</span>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- MODALS -->
+  <div class="modal-backdrop" id="admin-escalation-modal" role="dialog" aria-modal="true">
+    <div class="modal-window-lg">
+      <div class="modal-admin-header" style="background: var(--admin-navy-950); border-bottom: 3px solid #FF9933;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-family: monospace; font-size: 1.25rem; font-weight: 800; color: #FF9933;" id="modal-esc-id-text">EX-2041</span>
+          <span class="esc-overdue-tag" style="font-size: 0.75rem;">SLA BREACH ESCALATION</span>
+        </div>
+        <button class="modal-close-btn modal-close-trigger" aria-label="Close Console">&times;</button>
+      </div>
+
+      <div class="modal-body-scroll">
+        <div class="detail-layout-grid">
+          <div>
+            <div class="detail-card-panel">
+              <h4 class="card-title-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path></svg>
+                <span>Escalated Complaint Metadata</span>
+              </h4>
+              <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px;">
+                <div><strong>Complaint ID:</strong> <span id="modal-comp-id-text" style="font-family: monospace; color: var(--royal-blue); font-weight: 700;">LV-10482</span></div>
+                <div><strong>Category:</strong> <span id="modal-esc-category">Water Supply Outage</span></div>
+                <div><strong>Citizen:</strong> <span id="modal-esc-citizen">Sunita Verma</span></div>
+                <div><strong>Location:</strong> <span id="modal-esc-location">Sector 12 (Ward 12)</span></div>
+              </div>
+              <div class="citizen-report-box" id="modal-esc-desc">
+                "2 din se Sector 12 mein paani nahi aa raha..."
+              </div>
+            </div>
+
+            <div class="detail-card-panel">
+              <h4 class="card-title-head" style="color: var(--royal-blue);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <span>Explainable AI Priority Breakdown</span>
+              </h4>
+              <div class="ai-priority-breakdown-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 0.75rem; font-weight: 800; color: #991B1B;">EXPLAINABLE AI SCORE</span>
+                  <span style="font-size: 1.125rem; font-weight: 800; color: #DC2626;" id="modal-ai-total-score-val">94 / 100</span>
+                </div>
+                <div class="ai-segmented-bar" style="height: 10px; margin: 10px 0;">
+                  <div class="seg-item seg-service" style="width: 30%;"></div>
+                  <div class="seg-item seg-delay" style="width: 25%;"></div>
+                  <div class="seg-item seg-citizens" style="width: 20%;"></div>
+                  <div class="seg-item seg-vulnerable" style="width: 10%;"></div>
+                  <div class="seg-item seg-sentiment" style="width: 9%;"></div>
+                </div>
+                <div id="modal-ai-priority-breakdown">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+            </div>
+
+            <div class="detail-card-panel" style="border-left: 4px solid var(--ai-cyan); background: linear-gradient(135deg, #ECFEFF 0%, #FFFFFF 100%);">
+              <h4 class="card-title-head" style="color: var(--ai-cyan-dark);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle></svg>
+                <span>LokVaani AI Command Recommendation</span>
+              </h4>
+              <div style="font-size: 0.9375rem; font-weight: 700; color: var(--navy-900); margin-bottom: 8px;" id="modal-esc-recommendation">
+                "Immediate reassignment recommended to Senior Engineer Suresh Patel due to critical severity."
+              </div>
+              <div style="font-size: 0.8125rem; color: var(--text-secondary);">
+                <strong>Citizen Impact Risk:</strong> <span id="modal-esc-impact">High</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="detail-card-panel" style="border-top: 4px solid #DC2626;">
+              <h4 class="card-title-head" style="color: #DC2626;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Officer SLA Breach Info</span>
+              </h4>
+              <div style="font-size: 0.875rem; display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px;">
+                <div><span style="color: var(--text-muted);">Current Officer:</span> <strong id="modal-esc-officer">Rajesh Kumar (OFF-WTR-047)</strong></div>
+                <div><span style="color: var(--text-muted);">Department:</span> <strong id="modal-esc-dept">Water Supply Department</strong></div>
+                <div><span style="color: var(--text-muted);">SLA Breach Duration:</span> <strong style="color: #DC2626;" id="modal-esc-breach">1h 13m OVERDUE</strong></div>
+              </div>
+            </div>
+
+            <div class="detail-card-panel" style="background: var(--admin-navy-900); color: white; border-top: 3px solid #FF9933;">
+              <h4 class="card-title-head" style="color: #FF9933;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>Administrator Decision Panel</span>
+              </h4>
+              <p style="font-size: 0.8125rem; color: var(--text-inverse-muted); margin-bottom: 16px;">
+                Select an executive action to resolve this SLA breach:
+              </p>
+
+              <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn btn-primary" style="width: 100%; justify-content: center; background: #FF9933; border-color: #E65100; color: #000000; font-weight: 800;" id="btn-admin-reassign">
+                  🔄 Reassign Officer & Transfer Case
+                </button>
+                <button class="btn btn-secondary" style="width: 100%; justify-content: center; background: rgba(255, 255, 255, 0.1); color: white;" id="btn-admin-depthead">
+                  🚀 Escalate to Department Head
+                </button>
+                <button class="btn" style="width: 100%; justify-content: center; background: #E65100; color: white; font-weight: 800;" id="btn-admin-emergency">
+                  ⚡ Authorize Emergency Response Team
+                </button>
+                <button class="btn" style="width: 100%; justify-content: center; background: #138808; color: white;" id="btn-admin-resolve">
+                  ✓ Direct Administrative Closure
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="reassign-modal" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 500px;">
+      <div class="modal-header" style="background: var(--navy-900); color: white; border-bottom: 3px solid #FF9933; padding: 18px 24px;">
+        <h3>Reassign Escalation Case</h3>
+        <button class="modal-close-btn modal-close-trigger" style="color: white;">&times;</button>
+      </div>
+      <form id="reassign-form" class="modal-body" style="padding: 24px;">
+        <div style="font-size: 0.84375rem; margin-bottom: 16px;">
+          Current Officer: <strong id="reassign-current-officer" style="color: #DC2626;">Rajesh Kumar</strong>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="select-new-officer">Select Target Senior Officer:</label>
+          <select class="filter-select" id="select-new-officer" style="width: 100%;">
+            <!-- Dynamically Populated -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reassign-reason-input">Reassignment Directive / Reason:</label>
+          <textarea class="form-textarea" id="reassign-reason-input" rows="3" placeholder="Directive to new officer...">Reassigned due to 4-hour SLA breach. Priority valve replacement required immediately.</textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 20px;">
+          <button type="button" class="btn btn-secondary modal-close-trigger">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="background: #FF9933; border-color: #E65100; color: #000000; font-weight: 800;">
+            Confirm Reassignment
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="zone-detail-modal" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 540px;">
+      <div class="modal-header" style="background: var(--admin-navy-900); border-bottom: 3px solid #FF9933; color: white; padding: 18px 24px;">
+        <div>
+          <h3 id="zone-modal-title" style="font-family: var(--font-heading); color: #FF9933;">Zone Details</h3>
+          <div style="font-size: 0.75rem; color: var(--text-inverse-muted);" id="zone-modal-sub">Municipal Zone Breakdown</div>
+        </div>
+        <button class="modal-close-btn modal-close-trigger" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; background: var(--bg-surface-alt); padding: 14px; border-radius: 8px; margin-bottom: 16px;">
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Complaints</span>
+            <div style="font-weight: 800; font-size: 1.125rem; color: var(--navy-900);" id="zone-modal-complaints">238</div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Critical</span>
+            <div style="font-weight: 800; font-size: 1.125rem; color: #DC2626;" id="zone-modal-critical">72</div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">SLA Rate</span>
+            <div style="font-weight: 800; font-size: 1.125rem; color: #138808;" id="zone-modal-sla">84%</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <strong style="font-size: 0.84375rem; color: var(--navy-900);">Top Civic Issue:</strong>
+          <div style="font-size: 0.90625rem; font-weight: 700; color: #E65100; margin-top: 2px;" id="zone-modal-issue">Water Supply Network Outage</div>
+        </div>
+
+        <div style="background: #FFF3E0; border: 1px solid #FFE0B2; border-radius: 8px; padding: 12px; margin-bottom: 20px;">
+          <strong style="font-size: 0.78125rem; color: #E65100;">🤖 AI Telemetry Signal:</strong>
+          <div style="font-size: 0.84375rem; color: var(--navy-900); font-weight: 600; margin-top: 2px;" id="zone-modal-signal">Complaint volume ↑ 28% over last 24h</div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+          <button type="button" class="btn btn-secondary modal-close-trigger">Close</button>
+          <button type="button" class="btn btn-primary" style="background: #FF9933; border-color: #E65100; color: black; font-weight: 800;" onclick="adminState.currentView='complaints'; document.getElementById('zone-detail-modal').classList.remove('active'); renderAdminCurrentView();">
+            View Zone Complaints →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="sla-policy-modal" role="dialog" aria-modal="true">
+    <div class="modal-window" style="max-width: 520px;">
+      <div class="modal-header" style="background: var(--admin-navy-900); border-bottom: 3px solid #FF9933; color: white; padding: 18px 24px;">
+        <h3 style="font-family: var(--font-heading); color: #FF9933;">⏱️ Municipal SLA Policy Rules</h3>
+        <button class="modal-close-btn modal-close-trigger" style="color: white;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 24px;">
+        <p style="font-size: 0.84375rem; color: var(--text-secondary); margin-bottom: 16px;">
+          LokVaani AI enforces strict resolution countdowns based on complaint severity score:
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #FFF5F5; border: 1px solid #FECACA; border-radius: 8px;">
+            <strong style="color: #991B1B;">Critical Severity (Score 90–100)</strong>
+            <span style="font-weight: 800; color: #DC2626;">4 Hours Max SLA</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #FFF3E0; border: 1px solid #FFE0B2; border-radius: 8px;">
+            <strong style="color: #E65100;">High Priority (Score 70–89)</strong>
+            <span style="font-weight: 800; color: #E65100;">24 Hours Max SLA</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 8px;">
+            <strong style="color: #075985;">Medium Priority (Score 40–69)</strong>
+            <span style="font-weight: 800; color: #0284C7;">48 Hours Max SLA</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; padding: 10px 14px; background: #E8F5E9; border: 1px solid #C8E6C9; border-radius: 8px;">
+            <strong style="color: #138808;">Low Priority (Score 0–39)</strong>
+            <span style="font-weight: 800; color: #138808;">72 Hours Max SLA</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="btn btn-primary modal-close-trigger" style="background: #FF9933; border-color: #E65100; color: black; font-weight: 800;">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/admin-mock-data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
