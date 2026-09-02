@@ -32,9 +32,12 @@ function isSupabaseConnected() {
 }
 
 /**
- * FETCH COMPLAINTS
+ * FETCH COMPLAINTS (SUPABASE + LOCAL STORAGE + MOCK)
  */
 async function getComplaintsFromDb() {
+  let dbMapped = [];
+  let fetchedFromDb = false;
+
   if (isSupabaseConnected()) {
     try {
       const { data, error } = await supabaseClient
@@ -43,15 +46,14 @@ async function getComplaintsFromDb() {
         .order('created_at', { ascending: false });
 
       if (!error && data && data.length > 0) {
-        // Map Supabase column names to frontend expectations
-        const mapped = data.map(c => ({
+        dbMapped = data.map(c => ({
           complaintId: c.reference_code,
           dbId: c.id,
           citizenName: c.citizen_name,
           citizenContact: c.citizen_contact,
           description: c.description,
           category: c.category,
-          department: c.department_id,
+          department: c.department_id || (c.category && c.category.includes('Water') ? 'Water Supply Department' : 'Public Works Department'),
           location: c.location_name,
           gisCoordinates: `${c.latitude}° N, ${c.longitude}° E`,
           priorityScore: c.priority_score,
@@ -59,10 +61,11 @@ async function getComplaintsFromDb() {
           severity: c.severity,
           sentiment: c.sentiment,
           aiSummary: c.ai_summary,
-          priorityReasons: c.priority_reasons || [],
-          slaHours: c.sla_hours,
-          slaState: c.sla_state,
-          status: c.status,
+          priorityReasons: c.priority_reasons || [{ label: "Public report received", points: 25 }],
+          slaHours: c.sla_hours || 24,
+          slaRemainingSeconds: (c.sla_hours || 24) * 3600,
+          slaState: c.sla_state || "ON TRACK",
+          status: c.status || "Assigned",
           assignedOfficer: c.assigned_officer_id || "Er. Rajesh Kumar",
           createdAt: c.created_at ? new Date(c.created_at).toLocaleString() : "Today",
           updatedAt: c.updated_at ? new Date(c.updated_at).toLocaleString() : "Today",
@@ -70,43 +73,110 @@ async function getComplaintsFromDb() {
           resolutionProof: c.resolution_proof_url || "",
           relatedComplaints: []
         }));
-        return { success: true, data: mapped, source: 'supabase' };
+        fetchedFromDb = true;
       }
     } catch (err) {
       console.warn("Supabase complaints query fallback:", err);
     }
   }
-  return { success: true, data: typeof INITIAL_COMPLAINTS !== 'undefined' ? INITIAL_COMPLAINTS : [], source: 'mock' };
+
+  // Load complaints submitted via browser form and saved in localStorage
+  let localSubmitted = [];
+  try {
+    localSubmitted = JSON.parse(localStorage.getItem('lokvaani_submitted_complaints') || '[]');
+  } catch (e) {}
+
+  // Baseline mock complaints
+  const mockBaseline = typeof INITIAL_COMPLAINTS !== 'undefined' ? INITIAL_COMPLAINTS : [];
+
+  // Merge order: Local Submitted (newest) -> Supabase DB -> Mock Baseline (deduplicated by complaintId)
+  const combined = [];
+  const seenIds = new Set();
+
+  [...localSubmitted, ...dbMapped, ...mockBaseline].forEach(item => {
+    if (item && item.complaintId && !seenIds.has(item.complaintId)) {
+      seenIds.add(item.complaintId);
+      combined.push(item);
+    }
+  });
+
+  return { success: true, data: combined, source: fetchedFromDb ? 'supabase' : 'local' };
 }
 
 /**
  * CREATE NEW COMPLAINT (CITIZEN PORTAL)
  */
 async function createComplaintInDb(complaint) {
+  const refCode = complaint.complaintId || `LV-${Math.floor(10000 + Math.random() * 90000)}`;
+
+  const formattedComplaint = {
+    complaintId: refCode,
+    citizenName: complaint.citizenName || "LokVaani Citizen",
+    citizenContact: complaint.citizenContact || "+91 98000 00000",
+    description: complaint.description || complaint.text || "Civic Issue",
+    category: complaint.category || "Municipal Grievance",
+    department: complaint.department || "Water Supply Department",
+    location: complaint.location || "Sector 12 (Ward 12)",
+    gisCoordinates: complaint.gisCoordinates || `${complaint.latitude || 18.5204}° N, ${complaint.longitude || 73.8567}° E`,
+    priorityScore: complaint.priorityScore || 82,
+    priorityLevel: complaint.priorityLevel || "High",
+    severity: complaint.severity || complaint.priorityLevel || "High",
+    sentiment: complaint.sentiment || "Concerned",
+    aiSummary: complaint.aiSummary || `Citizen grievance report submitted at ${complaint.location || 'Ward 12'}.`,
+    priorityReasons: complaint.priorityReasons || [
+      { label: "Public grievance submitted by citizen", points: 30 },
+      { label: "Location & Ward boundaries verified", points: 25 },
+      { label: "Assigned default resolution SLA", points: 20 }
+    ],
+    slaHours: complaint.slaHours || 24,
+    slaRemainingSeconds: (complaint.slaHours || 24) * 3600,
+    slaState: complaint.slaState || "ON TRACK",
+    status: complaint.status || "Assigned",
+    assignedOfficer: complaint.assignedOfficer || "Er. Rajesh Kumar",
+    createdAt: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    updatedAt: "Just now",
+    resolutionNote: "",
+    resolutionProof: "",
+    relatedComplaints: []
+  };
+
+  // Always save to localStorage immediately for instant cross-portal access
+  try {
+    const localList = JSON.parse(localStorage.getItem('lokvaani_submitted_complaints') || '[]');
+    const existsIndex = localList.findIndex(c => c.complaintId === refCode);
+    if (existsIndex >= 0) {
+      localList[existsIndex] = formattedComplaint;
+    } else {
+      localList.unshift(formattedComplaint);
+    }
+    localStorage.setItem('lokvaani_submitted_complaints', JSON.stringify(localList));
+    console.log("🟢 Saved complaint to localStorage:", refCode);
+  } catch (e) {
+    console.warn("localStorage write error:", e);
+  }
+
+  // Attempt live Supabase database insert
   if (isSupabaseConnected()) {
     try {
-      // Find matching department ID or use default
-      const deptCode = complaint.department && complaint.department.includes('Water') ? 'DEP-WTR' : 'DEP-PWD';
-      
       const payload = {
-        reference_code: complaint.complaintId || `LV-${Math.floor(10000 + Math.random() * 90000)}`,
-        citizen_name: complaint.citizenName || "Anonymous Citizen",
-        citizen_contact: complaint.citizenContact || "+91 98000 00000",
-        description: complaint.description || complaint.text,
-        category: complaint.category || "Municipal Grievance",
-        location_name: complaint.location || "Sector 12 (Ward 12)",
+        reference_code: refCode,
+        citizen_name: formattedComplaint.citizenName,
+        citizen_contact: formattedComplaint.citizenContact,
+        description: formattedComplaint.description,
+        category: formattedComplaint.category,
+        location_name: formattedComplaint.location,
         latitude: complaint.latitude || 18.5204,
         longitude: complaint.longitude || 73.8567,
         zone: complaint.zone || "Zone 4",
-        priority_score: complaint.priorityScore || 82,
-        priority_level: complaint.priorityLevel || "High",
-        severity: complaint.severity || "High",
-        sentiment: complaint.sentiment || "Concerned",
-        ai_summary: complaint.aiSummary || "Citizen report triage complete",
-        sla_hours: complaint.slaHours || 24,
-        sla_deadline: new Date(Date.now() + (complaint.slaHours || 24) * 3600 * 1000).toISOString(),
-        sla_state: "ON TRACK",
-        status: "Assigned"
+        priority_score: formattedComplaint.priorityScore,
+        priority_level: formattedComplaint.priorityLevel,
+        severity: formattedComplaint.severity,
+        sentiment: formattedComplaint.sentiment,
+        ai_summary: formattedComplaint.aiSummary,
+        sla_hours: formattedComplaint.slaHours,
+        sla_deadline: new Date(Date.now() + formattedComplaint.slaHours * 3600 * 1000).toISOString(),
+        sla_state: formattedComplaint.slaState,
+        status: formattedComplaint.status
       };
 
       const { data, error } = await supabaseClient
@@ -115,14 +185,17 @@ async function createComplaintInDb(complaint) {
         .select();
 
       if (!error && data && data.length > 0) {
-        console.log("🟢 Complaint saved to Supabase:", data[0].reference_code);
+        console.log("🟢 Complaint saved to Supabase DB:", data[0].reference_code);
         return { success: true, data: data[0], referenceCode: data[0].reference_code };
+      } else if (error) {
+        console.warn("Supabase insert notice (using local storage backup):", error.message);
       }
     } catch (err) {
-      console.error("Failed to insert complaint into Supabase:", err);
+      console.warn("Failed to insert complaint into Supabase:", err);
     }
   }
-  return { success: true, referenceCode: complaint.complaintId || `LV-${Math.floor(10000 + Math.random() * 90000)}`, mock: true };
+
+  return { success: true, referenceCode: refCode, mock: true };
 }
 
 /**
